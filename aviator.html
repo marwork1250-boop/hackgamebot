@@ -26,8 +26,8 @@
     .btn-wrap {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      max-width: 320px;
+      gap: 18px;
+      max-width: 340px;
       margin: 0 auto;
     }
 
@@ -53,6 +53,12 @@
       font-size: 20px;
       font-weight: 600;
       color: #3ee6a8;
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+
+    .result.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -72,9 +78,15 @@
     const stakeBtn = document.getElementById("getStake");
     const signalBtn = document.getElementById("getSignal");
 
+    function showResult(text) {
+      resultBox.textContent = text;
+      resultBox.classList.remove("show");
+      setTimeout(() => resultBox.classList.add("show"), 50);
+    }
+
     stakeBtn.addEventListener("click", () => {
       const randomStake = Math.floor(Math.random() * (3000 - 1200 + 1)) + 1200;
-      resultBox.textContent = `💰 Mise recommandée : ${randomStake} XOF`;
+      showResult(`💰 Mise recommandée : ${randomStake} XOF`);
     });
 
     signalBtn.addEventListener("click", () => {
@@ -86,9 +98,8 @@
         "📉 Prudence : encaissez rapidement à 1.5x"
       ];
       const pick = signals[Math.floor(Math.random() * signals.length)];
-      resultBox.textContent = `🔮 Signal IA : ${pick}`;
+      showResult(`🔮 Signal IA : ${pick}`);
     });
   </script>
 </body>
 </html>
-
