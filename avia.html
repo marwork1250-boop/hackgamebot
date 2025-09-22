@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Aviator — AI Predictor</title>
+  <style>body{font-family:Segoe UI,Arial;background:#0d1117;color:#fff;padding:30px} a{color:#3ee6a8}</style>
+</head>
+<body>
+  <h1>Aviator — страница</h1>
+  <p id="info">Загрузка...</p>
+  <p><a href="index.html">← Вернуться на главную</a></p>
+<script>
+  function getQuery(name){ const params=new URLSearchParams(location.search); return params.get(name); }
+  const user = getQuery('user');
+  document.getElementById('info').innerText = user ? 'Ваш ID: ' + user : 'ID не передан.';
+</script>
+</body>
+</html>
