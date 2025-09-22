@@ -14,30 +14,27 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
     }
 
     .container {
       background: #1a1a1a;
       padding: 30px;
-      border-radius: 16px;
+      border-radius: 12px;
       text-align: center;
       width: 90%;
       max-width: 500px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
-      animation: fadeIn 1.2s ease-out;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
     }
 
     h1 {
       color: #ffcc00;
       margin-bottom: 20px;
-      animation: slideDown 1s ease-out;
     }
 
     .btn {
       display: inline-block;
       margin: 10px;
-      padding: 14px 22px;
+      padding: 12px 20px;
       border: none;
       border-radius: 6px;
       background: #ffcc00;
@@ -45,13 +42,11 @@
       font-weight: bold;
       cursor: pointer;
       transition: 0.3s;
-      font-size: 16px;
     }
 
     .btn:hover {
       background: #e6b800;
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+      transform: translateY(-2px) scale(1.05);
     }
 
     .outline-btn {
@@ -64,13 +59,13 @@
     .signal-box {
       background: #2a2a2a;
       margin: 20px auto;
-      padding: 35px;
-      border-radius: 12px;
+      padding: 30px;
+      border-radius: 10px;
       font-size: 32px;
       font-weight: bold;
       color: #00ff99;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.7), 0 0 15px #00ff99;
-      animation: pulse 2s infinite;
+      text-shadow: 0 0 5px #00ff99, 0 0 15px #00ff99;
+      animation: neonPulse 2s infinite;
     }
 
     .info-text {
@@ -81,58 +76,11 @@
     }
 
     /* Анимации */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
+    @keyframes neonPulse {
       0%, 100% { text-shadow: 0 0 5px #00ff99, 0 0 15px #00ff99, 0 0 30px #00ff99; }
-      50% { text-shadow: 0 0 15px #00ff99, 0 0 30px #00ff99, 0 0 45px #00ff99; }
+      50% { text-shadow: 0 0 10px #00ff99, 0 0 25px #00ff99, 0 0 40px #00ff99; }
     }
 
     @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0.5; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <h1>Aviator Signal Predictor</h1>
-    <button class="btn outline-btn">HOW TO USE BOT</button>
-    <div class="signal-box" id="signalBox">GET YOUR SIGNAL</div>
-    <div class="info-text" id="betAmountText"></div>
-    <div>
-      <button class="btn" onclick="getBetAmount()">Get bet amount</button>
-      <button class="btn" onclick="getSignal()">Get Signal</button>
-    </div>
-  </div>
-
-  <script>
-    function getBetAmount() {
-      let amount = Math.floor(Math.random() * (3000 - 1200 + 1)) + 1200;
-      let betText = document.getElementById("betAmountText");
-      betText.innerText = "Your bet amount: " + amount + " XOF";
-      betText.style.animation = "pop 0.5s ease";
-      setTimeout(() => betText.style.animation = "", 500);
-    }
-
-    function getSignal() {
-      let multiplier = (Math.random() * (3 - 1.2) + 1.2).toFixed(2);
-      let signalBox = document.getElementById("signalBox");
-      signalBox.innerText = multiplier + "x";
-      signalBox.style.animation = "pop 0.6s ease, pulse 2s infinite";
-      setTimeout(() => signalBox.style.animation = "pulse 2s infinite", 600);
-    }
-  </script>
-
-</body>
-</html>
+      0% { transform: scale(0.8); opacity: 0.7; }
+      50% { transform: scale(1.2); opacity: 1;
