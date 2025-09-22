@@ -10,6 +10,8 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #0d1117;
       color: white;
+      max-width: 100vw;     /* ограничение ширины */
+      overflow-x: hidden;   /* убираем горизонтальный скролл */
     }
 
     header {
@@ -223,10 +225,10 @@
     96% signal accuracy, real-time predictions, and fast withdrawals!</p>
 
     <div class="btn-container">
-      <button class="game-btn blue" onclick="showModal()">Aviator Prediction</button>
-      <button class="game-btn purple" onclick="showModal()">Mines Prediction</button>
-      <button class="game-btn purple" onclick="showModal()">Penalty Prediction</button>
-      <button class="game-btn blue" onclick="showModal()">Chicken Road Prediction</button>
+      <button class="game-btn blue" onclick="showModal('aviator')">Aviator Prediction</button>
+      <button class="game-btn purple" onclick="showModal('mines')">Mines Prediction</button>
+      <button class="game-btn purple" onclick="showModal('penalty')">Penalty Prediction</button>
+      <button class="game-btn blue" onclick="showModal('chicken')">Chicken Road Prediction</button>
     </div>
   </main>
 
@@ -264,7 +266,10 @@
   </footer>
 
   <script>
-    function showModal() {
+    let selectedGame = null;
+
+    function showModal(game) {
+      selectedGame = game;
       document.getElementById("idModal").style.display = "flex";
       document.getElementById("userIdInput").value = "";
       document.getElementById("errorText").innerText = "";
@@ -282,6 +287,19 @@
       } else {
         errorText.innerText = "";
         accessGranted.style.display = "block";
+
+        // после подтверждения переходим на нужную страницу
+        setTimeout(() => {
+          if (selectedGame === "aviator") {
+            window.location.href = "aviator.html";
+          } else if (selectedGame === "mines") {
+            window.location.href = "mines.html";
+          } else if (selectedGame === "penalty") {
+            window.location.href = "penalty.html";
+          } else if (selectedGame === "chicken") {
+            window.location.href = "chicken.html";
+          }
+        }, 1500);
       }
     }
 
