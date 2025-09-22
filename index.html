@@ -1,183 +1,169 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BETWINNER BURKINA FASO</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body { margin:0; padding:0; height:100%; overflow-x: hidden; background:#0d1117; color:#fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .site-wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      color: white;
+      overflow-x: hidden;
+    }
 
     header {
-      width: 100%;
-      background-color: #161b22;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
+      background: #111;
+      padding: 15px;
+      text-align: center;
+      color: #ffcc00;
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    main {
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #ffcc00;
+    }
+
+    p {
+      max-width: 500px;
+      margin: 10px auto 20px;
+      color: #ccc;
+    }
+
+    .btn {
+      display: block;
+      margin: 15px auto;
+      padding: 14px 25px;
+      border: none;
+      border-radius: 6px;
+      background: #ffcc00;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 80%;
+      max-width: 280px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #e6b800;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      border-top: 1px solid #333;
+    }
+
+    /* Модалка */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
-    .logo { color: #3ee6a8; font-weight: bold; font-size: 18px; }
-    nav a { margin-left: 20px; color: #ccc; text-decoration: none; font-size: 14px; }
-    nav a:hover { color: #fff; }
 
-    main { display:flex; flex-direction:column; align-items:center; padding: 40px 0; }
-    h1 { font-size: 32px; text-align:center; margin:0 0 10px; }
-    p.lead { font-size:16px; text-align:center; max-width:600px; color:#aaa; margin:0 0 30px; }
-
-    .btn-container {
-      display:flex; flex-direction:column; gap:12px; width:100%; max-width:340px;
+    .modal-content {
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
     }
-    .game-btn {
-      padding:14px; font-size:16px; border:none; border-radius:8px; cursor:pointer; font-weight:700; transition:opacity .2s; width:100%;
+
+    .modal input {
+      width: 80%;
+      padding: 10px;
+      margin: 15px 0;
+      border: none;
+      border-radius: 6px;
+      outline: none;
     }
-    .game-btn.blue { background:#2563eb; color:#fff; }
-    .game-btn.purple { background:#7c3aed; color:#fff; }
-    .game-btn:hover { opacity:.92; }
 
-    /* Modal */
-    #idModal { display:none; position:fixed; inset:0; background: rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:1000; }
-    .modal-content { background:#1f2937; padding:26px; border-radius:10px; width:90%; max-width:420px; text-align:center; }
-    .modal-content input { width:100%; padding:12px; margin:12px 0; border-radius:6px; border:none; font-size:16px; }
-    .modal-content button { padding:12px 18px; border:none; border-radius:6px; background:#22c55e; color:#fff; font-weight:700; cursor:pointer; }
-    .modal-content .error { color:#ff7b7b; margin-top:8px; font-size:14px; }
-    .access-granted { color:#22c55e; margin-top:8px; font-weight:700; }
+    .modal .btn {
+      width: 100%;
+    }
 
-    .how-it-works { margin-top:50px; padding:30px 0 60px; background:#161b22; text-align:center; width:100%; }
-    .steps { display:flex; flex-direction:column; gap:16px; max-width:1000px; margin:0 auto; }
-    .step { background:#2d3748; border-radius:10px; padding:18px; }
-    .step h3 { color:#3ee6a8; margin:0 0 6px; font-size:16px; }
-    .step p { margin:0; color:#ccc; font-size:14px; }
-
-    footer { text-align:center; padding:18px 0; color:#777; font-size:13px; }
-
-    @media(min-width:768px) {
-      .steps { flex-direction:row; justify-content:space-between; }
-      .step { width:30%; }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="site-wrap">
-    <header>
-      <div class="logo">BETWINNER BURKINA FASO</div>
-      <nav>
-        <a href="#how">How It Works</a>
-        <a href="#">Games</a>
-        <a href="#">Get Started</a>
-      </nav>
-    </header>
 
-    <main>
-      <h1>Earn Real Money with AI Game Predictions</h1>
-      <p class="lead">Join thousands of Burkinabè players using our smart AI to win in popular games.<br/>96% signal accuracy, real-time predictions, and fast withdrawals!</p>
+  <header>BETWINNER BURKINA FASO</header>
 
-      <div class="btn-container">
-        <button class="game-btn blue" data-game="aviator">Aviator Prediction</button>
-        <button class="game-btn purple" data-game="mines">Mines Prediction</button>
-        <button class="game-btn purple" data-game="penalty">Penalty Prediction</button>
-        <button class="game-btn blue" data-game="chicken">Chicken Road Prediction</button>
-      </div>
-    </main>
-  </div>
+  <main>
+    <h1>Welcome</h1>
+    <p>Choose your game and start winning with BETWINNER!</p>
+    <button class="btn" onclick="openModal('aviator.html')">Aviator</button>
+    <button class="btn" onclick="openModal('mines.html')">Mines</button>
+    <button class="btn" onclick="openModal('penalty.html')">Penalty</button>
+    <button class="btn" onclick="openModal('chicken.html')">Chicken Road</button>
+  </main>
 
-  <!-- Modal -->
-  <div id="idModal">
+  <footer>
+    © 2025 BETWINNER BURKINA FASO. All rights reserved.
+  </footer>
+
+  <!-- Модалка -->
+  <div class="modal" id="idModal">
     <div class="modal-content">
-      <h2>Enter Your ID</h2>
-      <input type="text" id="userIdInput" placeholder="Your Player ID" />
-      <div class="error" id="errorText"></div>
-      <div class="access-granted" id="accessGranted" style="display:none;">✅ Access Granted</div>
-      <div style="margin-top:12px;"><button id="submitBtn">Submit</button></div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Enter your ID</h2>
+      <input type="text" id="userId" placeholder="Enter ID (min 7 chars)">
+      <button class="btn" onclick="verifyId()">Verify</button>
+      <p id="errorMsg" style="color:red;"></p>
     </div>
   </div>
-
-  <section id="how" class="how-it-works">
-    <h2>How It Works</h2>
-    <div class="steps">
-      <div class="step">
-        <h3>1. Enter Your ID</h3>
-        <p>Provide your BETWINNER BURKINA FASO account ID to get started.</p>
-      </div>
-      <div class="step">
-        <h3>2. Choose a Game</h3>
-        <p>Select from supported prediction games available in Burkina Faso.</p>
-      </div>
-      <div class="step">
-        <h3>3. Receive Predictions</h3>
-        <p>Get AI-powered predictions with 96% accuracy rate.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer>© 2025 AI Predictor Burkina Faso. Not affiliated with BETWINNER. Use responsibly.</footer>
 
   <script>
-    let selectedGame = null;
+    let redirectUrl = "";
 
-    // Вешаем обработчики на кнопки
-    document.querySelectorAll('.game-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedGame = btn.dataset.game;
-        console.log('Игра выбрана:', selectedGame);
-        document.getElementById('idModal').style.display = 'flex';
-        document.getElementById('userIdInput').value = '';
-        document.getElementById('errorText').innerText = '';
-        document.getElementById('accessGranted').style.display = 'none';
-      });
-    });
+    function openModal(url) {
+      redirectUrl = url;
+      document.getElementById("idModal").style.display = "flex";
+    }
 
-    // Закрытие модалки при клике по фону
-    window.addEventListener('click', (e) => {
-      if (e.target.id === 'idModal') document.getElementById('idModal').style.display = 'none';
-    });
+    function closeModal() {
+      document.getElementById("idModal").style.display = "none";
+    }
 
-    // Submit
-    document.getElementById('submitBtn').addEventListener('click', validateId);
-
-    function validateId() {
-      const userId = document.getElementById('userIdInput').value.trim();
-      const errorText = document.getElementById('errorText');
-      const accessGranted = document.getElementById('accessGranted');
-
-      console.log('validateId called, selectedGame=', selectedGame, 'userId=', userId);
-
-      if (!selectedGame) {
-        errorText.innerText = 'Ошибка: не выбрана игра. Откройте модалку через кнопку игры.';
-        return;
+    function verifyId() {
+      let userId = document.getElementById("userId").value;
+      if (userId.length >= 7) {
+        window.location.href = redirectUrl; 
+      } else {
+        document.getElementById("errorMsg").innerText = "❌ ID must be at least 7 characters.";
       }
+    }
 
-      if (userId.length < 7) {
-        errorText.innerText = 'ID должен содержать минимум 7 символов.';
-        accessGranted.style.display = 'none';
-        return;
+    window.onclick = function(event) {
+      let modal = document.getElementById("idModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
       }
-
-      // Успех
-      errorText.innerText = '';
-      accessGranted.style.display = 'block';
-
-      // Закрываем модалку и переходим на страницу выбранной игры.
-      const map = {
-        aviator: 'aviator.html',
-        mines: 'mines.html',
-        penalty: 'penalty.html',
-        chicken: 'chicken.html'
-      };
-      const target = map[selectedGame] || 'index.html';
-
-      console.log('Перенаправление на: ', target);
-
-      // Закрываем модалку плавно, оставляем небольшую задержку чтобы увидеть Access Granted
-      setTimeout(() => {
-        document.getElementById('idModal').style.display = 'none';
-        // передаём userId как query param — удобно для заглушек/логики на целевой странице
-        const url = target + '?user=' + encodeURIComponent(userId);
-        // используем location.assign — обычный переход
-        location.assign(url);
-      }, 700);
     }
   </script>
+
 </body>
 </html>
