@@ -10,12 +10,6 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #0d1117;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 40px 20px;
     }
 
     header {
@@ -45,10 +39,17 @@
       color: white;
     }
 
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
     h1 {
       font-size: 32px;
       text-align: center;
-      margin: 40px 0 10px;
+      margin-bottom: 10px;
     }
 
     p {
@@ -147,6 +148,62 @@
       margin-top: 10px;
       font-weight: bold;
     }
+
+    .how-it-works {
+      margin-top: 100px;
+      padding: 50px 20px;
+      background-color: #161b22;
+      text-align: center;
+    }
+
+    .how-it-works h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background-color: #2d3748;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .step h3 {
+      color: #3ee6a8;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #0d1117;
+      font-size: 13px;
+      color: #555;
+    }
+
+    @media(min-width: 768px) {
+      .steps {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .step {
+        width: 30%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -154,22 +211,24 @@
   <header>
     <div class="logo">BETWINNER BURKINA FASO</div>
     <nav>
-      <a href="#">How It Works</a>
+      <a href="#how">How It Works</a>
       <a href="#">Games</a>
       <a href="#">Get Started</a>
     </nav>
   </header>
 
-  <h1>Earn Real Money with AI Game Predictions</h1>
-  <p>Join thousands of Burkinabè players using our smart AI to win in popular games.<br/>
-  96% signal accuracy, real-time predictions, and fast withdrawals!</p>
+  <main>
+    <h1>Earn Real Money with AI Game Predictions</h1>
+    <p>Join thousands of Burkinabè players using our smart AI to win in popular games.<br/>
+    96% signal accuracy, real-time predictions, and fast withdrawals!</p>
 
-  <div class="btn-container">
-    <button class="game-btn blue" onclick="showModal('Aviator')">Aviator Prediction</button>
-    <button class="game-btn purple" onclick="showModal('Mines')">Mines Prediction</button>
-    <button class="game-btn purple" onclick="showModal('Penalty')">Penalty Prediction</button>
-    <button class="game-btn blue" onclick="showModal('Chicken Road')">Chicken Road Prediction</button>
-  </div>
+    <div class="btn-container">
+      <button class="game-btn blue" onclick="showModal()">Aviator Prediction</button>
+      <button class="game-btn purple" onclick="showModal()">Mines Prediction</button>
+      <button class="game-btn purple" onclick="showModal()">Penalty Prediction</button>
+      <button class="game-btn blue" onclick="showModal()">Chicken Road Prediction</button>
+    </div>
+  </main>
 
   <!-- Modal -->
   <div id="idModal">
@@ -182,38 +241,29 @@
     </div>
   </div>
 
+  <section id="how" class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Enter Your ID</h3>
+        <p>Provide your BETWINNER BURKINA FASO account ID to get started.</p>
+      </div>
+      <div class="step">
+        <h3>2. Choose a Game</h3>
+        <p>Select from supported prediction games available in Burkina Faso.</p>
+      </div>
+      <div class="step">
+        <h3>3. Receive Predictions</h3>
+        <p>Get AI-powered predictions with 96% accuracy rate.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 AI Predictor Burkina Faso. Not affiliated with BETWINNER. Use responsibly.
+  </footer>
+
   <script>
-    function showModal(gameName) {
+    function showModal() {
       document.getElementById("idModal").style.display = "flex";
       document.getElementById("userIdInput").value = "";
-      document.getElementById("errorText").innerText = "";
-      document.getElementById("accessGranted").style.display = "none";
-    }
-
-    function validateId() {
-      const userId = document.getElementById("userIdInput").value.trim();
-      const errorText = document.getElementById("errorText");
-      const accessGranted = document.getElementById("accessGranted");
-
-      if (userId.length < 7) {
-        errorText.innerText = "ID must be at least 7 characters.";
-        accessGranted.style.display = "none";
-      } else {
-        errorText.innerText = "";
-        accessGranted.style.display = "block";
-        // здесь ты можешь перенаправить или показать новый блок
-        // window.location.href = "your-next-page.html"; // если хочешь перенаправление
-      }
-    }
-
-    // Закрытие модалки по клику вне неё
-    window.onclick = function(e) {
-      if (e.target.id === "idModal") {
-        document.getElementById("idModal").style.display = "none";
-      }
-    }
-  </script>
-
-</body>
-</html>
-
