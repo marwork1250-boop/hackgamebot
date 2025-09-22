@@ -1,118 +1,305 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BETWINNER BURKINA FASO</title>
   <style>
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;height:100%;overflow-x:hidden;background:#0d1117;color:#fff;font-family:Segoe UI,Arial}
-    .site{max-width:980px;margin:0 auto;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
-    .logo{color:#3ee6a8;font-weight:700}
-    .nav a{color:#ccc;margin-left:18px;text-decoration:none}
-    main{display:flex;flex-direction:column;align-items:center;padding:40px 10px}
-    h1{font-size:28px;margin:6px 0}
-    p.lead{color:#aaa;max-width:640px;text-align:center}
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d1117;
+      color: white;
+    }
 
-    /* 🔹 Увеличенные кнопки */
-    .btn-container{margin-top:30px;display:flex;flex-direction:column;gap:16px;width:100%;max-width:360px}
-    .game-btn{padding:18px;border-radius:10px;border:none;font-weight:700;cursor:pointer;font-size:18px;transition:transform 0.2s ease,opacity 0.2s ease}
-    .game-btn:hover{transform:scale(1.05);opacity:0.9}
-    .game-btn.blue{background:#2563eb;color:#fff}
-    .game-btn.purple{background:#7c3aed;color:#fff}
+    header {
+      width: 100%;
+      background-color: #161b22;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
 
-    footer{margin-top:60px;text-align:center;color:#777;padding:10px 0}
+    .logo {
+      color: #3ee6a8;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-    #idModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);justify-content:center;align-items:center;z-index:1000}
-    .modal-wrap{background:#1f2937;padding:24px;border-radius:10px;width:90%;max-width:420px;text-align:center}
-    .modal-wrap input{width:100%;padding:12px;border-radius:6px;border:none;font-size:16px;margin-top:12px}
-    .modal-wrap .submit{margin-top:12px;padding:12px 18px;border-radius:6px;border:none;background:#22c55e;color:#fff;font-weight:700;cursor:pointer}
-    .modal-wrap .error{color:#ff8a8a;margin-top:8px;font-size:14px}
-    .modal-wrap .access{color:#9ef08f;margin-top:8px;font-weight:700}
+    nav a {
+      margin-left: 20px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
+    }
 
-    @media(min-width:720px){
-      .btn-container{flex-direction:row;justify-content:center;flex-wrap:wrap}
-      .btn-container .game-btn{flex:1 1 160px;max-width:200px}
+    nav a:hover {
+      color: white;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      text-align: center;
+      max-width: 600px;
+      color: #aaa;
+    }
+
+    .btn-container {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .game-btn {
+      padding: 18px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .game-btn.blue {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .game-btn.purple {
+      background-color: #7c3aed;
+      color: white;
+    }
+
+    .game-btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    #idModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #1f2937;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .modal-content button {
+      padding: 12px 20px;
+      border: none;
+      background-color: #22c55e;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .modal-content button:hover {
+      background-color: #16a34a;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .access-granted {
+      color: #22c55e;
+      font-size: 16px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .how-it-works {
+      margin-top: 100px;
+      padding: 50px 20px;
+      background-color: #161b22;
+      text-align: center;
+    }
+
+    .how-it-works h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background-color: #2d3748;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .step h3 {
+      color: #3ee6a8;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #0d1117;
+      font-size: 13px;
+      color: #555;
+    }
+
+    @media(min-width: 768px) {
+      .steps {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .step {
+        width: 30%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="site">
-    <header>
-      <div class="logo">BETWINNER BURKINA FASO</div>
-      <nav class="nav">
-        <a href="#how">Comment ça marche</a>
-        <a href="#">Jeux</a>
-      </nav>
-    </header>
 
-    <main>
-      <h1>Gagnez de l’argent réel avec les prédictions IA</h1>
-      <p class="lead">Rejoignez des milliers de joueurs burkinabè qui utilisent notre IA intelligente pour gagner aux jeux populaires. 96% de précision des signaux, prédictions en temps réel et retraits rapides !</p>
+  <header>
+    <div class="logo">BETWINNER BURKINA FASO</div>
+    <nav>
+      <a href="#how">Comment ça marche</a>
+      <a href="#">Jeux</a>
+      <a href="#">Commencer</a>
+    </nav>
+  </header>
 
-      <div class="btn-container">
-        <button class="game-btn blue" data-target="aviator.html">Aviator</button>
-        <button class="game-btn purple" data-target="mines.html">Mines</button>
-        <button class="game-btn purple" data-target="penalty.html">Penalty</button>
-        <button class="game-btn blue" data-target="chicken.html">Chicken Road</button>
-      </div>
-    </main>
+  <main>
+    <h1>Gagnez de l’argent réel avec des prédictions IA</h1>
+    <p>Rejoignez des milliers de joueurs burkinabè utilisant notre IA intelligente.<br/>
+    96% de précision, prédictions en temps réel et retraits rapides !</p>
 
-    <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
-  </div>
+    <div class="btn-container">
+      <button class="game-btn blue" onclick="showModal('aviator.html')">Aviator</button>
+      <button class="game-btn purple" onclick="showModal()">Mines</button>
+      <button class="game-btn purple" onclick="showModal()">Penalty</button>
+      <button class="game-btn blue" onclick="showModal()">Chicken Road</button>
+    </div>
+  </main>
 
+  <!-- Modal -->
   <div id="idModal">
-    <div class="modal-wrap" role="dialog" aria-modal="true">
+    <div class="modal-content">
       <h2>Entrez votre ID</h2>
-      <input id="userIdInput" type="text" placeholder="ID joueur (min 7 caractères)" />
+      <input type="text" id="userIdInput" placeholder="Votre ID joueur" />
       <div class="error" id="errorText"></div>
-      <div class="access" id="accessGranted" style="display:none">✅ Accès autorisé</div>
-      <button class="submit" id="modalSubmit">Valider</button>
+      <div class="access-granted" id="accessGranted" style="display:none;">✅ Accès accordé</div>
+      <button onclick="validateId()">Soumettre</button>
     </div>
   </div>
 
+  <section id="how" class="how-it-works">
+    <h2>Comment ça marche</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Entrez votre ID</h3>
+        <p>Fournissez votre identifiant BETWINNER BURKINA FASO.</p>
+      </div>
+      <div class="step">
+        <h3>2. Choisissez un jeu</h3>
+        <p>Sélectionnez un jeu de prédiction disponible.</p>
+      </div>
+      <div class="step">
+        <h3>3. Recevez des prédictions</h3>
+        <p>Obtenez des prédictions basées sur l’IA avec 96% de précision.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.
+  </footer>
+
   <script>
-    const buttons = document.querySelectorAll('.game-btn');
-    const modal = document.getElementById('idModal');
-    const userIdInput = document.getElementById('userIdInput');
-    const errorText = document.getElementById('errorText');
-    const accessGranted = document.getElementById('accessGranted');
-    const submitBtn = document.getElementById('modalSubmit');
+    let redirectUrl = null;
 
-    let redirectTarget = 'aviator.html';
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        redirectTarget = btn.dataset.target || 'aviator.html';
-        errorText.textContent = '';
-        accessGranted.style.display = 'none';
-        userIdInput.value = '';
-        modal.style.display = 'flex';
-        setTimeout(()=>userIdInput.focus(),50);
-      });
-    });
+    function showModal(url) {
+      redirectUrl = url || null;
+      document.getElementById("idModal").style.display = "flex";
+      document.getElementById("userIdInput").value = "";
+      document.getElementById("errorText").innerText = "";
+      document.getElementById("accessGranted").style.display = "none";
+    }
 
-    submitBtn.addEventListener('click', () => {
-      const id = (userIdInput.value || '').trim();
-      if (id.length < 7) {
-        errorText.textContent = 'L’ID doit contenir au moins 7 caractères.';
-        accessGranted.style.display = 'none';
-        return;
+    function validateId() {
+      const userId = document.getElementById("userIdInput").value.trim();
+      const errorText = document.getElementById("errorText");
+      const accessGranted = document.getElementById("accessGranted");
+
+      if (userId.length < 7) {
+        errorText.innerText = "L’ID doit contenir au moins 7 caractères.";
+        accessGranted.style.display = "none";
+      } else {
+        errorText.innerText = "";
+        accessGranted.style.display = "block";
+        if (redirectUrl) {
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1200);
+        }
       }
-      errorText.textContent = '';
-      accessGranted.style.display = 'block';
-      setTimeout(()=>{
-        modal.style.display = 'none';
-        const url = redirectTarget + '?user=' + encodeURIComponent(id);
-        location.assign(url);
-      }, 600);
-    });
+    }
 
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
-    });
+    window.onclick = function(e) {
+      if (e.target.id === "idModal") {
+        document.getElementById("idModal").style.display = "none";
+      }
+    }
   </script>
+
 </body>
 </html>
-
-
