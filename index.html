@@ -13,103 +13,123 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
+            background-color: #2b2d42;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: white;
         }
 
         .container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 300px;
+            background-color: #1f1f30;
+            border-radius: 10px;
+            width: 350px;
+            padding: 30px;
             text-align: center;
         }
 
-        header h1 {
-            font-size: 24px;
+        h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 30px;
+        }
+
+        .bet-section input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
             color: #333;
         }
 
-        header p {
-            font-size: 14px;
-            color: #777;
-        }
-
-        .bet-section {
-            margin-top: 20px;
-        }
-
-        input {
-            padding: 10px;
-            margin-top: 10px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #4CAF50;
+        .bet-section button {
+            padding: 15px 20px;
+            font-size: 18px;
+            background-color: #ff7e00;
             color: white;
-            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
+            width: 100%;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .bet-section button:hover {
+            background-color: #e66a00;
         }
 
         .game-result {
-            margin-top: 30px;
+            background-color: #333;
+            border-radius: 10px;
             padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            margin-top: 30px;
+            display: none;
         }
 
-        button#resetButton {
+        .game-result h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .game-result p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .game-result .multiplier {
+            color: #ff7e00;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .game-result button {
             background-color: #f44336;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
         }
 
-        button#resetButton:hover {
-            background-color: #da190b;
+        .game-result button:hover {
+            background-color: #e21e19;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Aviator Game Bot</h1>
-            <p>Place your bet and try to predict the outcome!</p>
-        </header>
-        <main>
-            <div class="bet-section">
-                <label for="betAmount">Enter your bet (in XOF):</label>
-                <input type="number" id="betAmount" placeholder="Amount in XOF">
-                <button id="placeBetButton">Place Bet</button>
-            </div>
+        <h1>Aviator Game Bot</h1>
+        <p>Place your bet and try to predict the outcome!</p>
 
-            <div class="game-result" id="gameResult" style="display: none;">
-                <h2>Game Result</h2>
-                <p>Multiplier: <span id="multiplier">1.00</span>x</p>
-                <p>Your Bet: <span id="betAmountDisplay">0</span> XOF</p>
-                <p>Your Winnings: <span id="winnings">0</span> XOF</p>
-                <button id="resetButton">Play Again</button>
-            </div>
-        </main>
+        <div class="bet-section">
+            <input type="number" id="betAmount" placeholder="Enter bet amount in XOF" />
+            <button id="placeBetButton">Place Bet</button>
+        </div>
+
+        <div class="game-result" id="gameResult">
+            <h2>Game Result</h2>
+            <p>Your bet: <span id="betAmountDisplay">0</span> XOF</p>
+            <p>Multiplier: <span class="multiplier" id="multiplier">1.00</span>x</p>
+            <p>Your winnings: <span id="winnings">0</span> XOF</p>
+            <button id="resetButton">Play Again</button>
+        </div>
     </div>
 
     <script>
-        // Set up event listener for placing a bet
+        // Place bet event
         document.getElementById('placeBetButton').addEventListener('click', function() {
             const betAmount = parseFloat(document.getElementById('betAmount').value);
 
-            // Validate input
             if (isNaN(betAmount) || betAmount <= 0) {
                 alert('Please enter a valid bet amount.');
                 return;
@@ -119,21 +139,20 @@
             document.querySelector('.bet-section').style.display = 'none';
             document.getElementById('gameResult').style.display = 'block';
 
-            // Simulate multiplier (random between 1.5 and 10.0)
+            // Simulate random multiplier between 1.5 and 10
             const multiplier = (Math.random() * (10 - 1.5) + 1.5).toFixed(2);
 
             // Calculate winnings
             const winnings = (betAmount * multiplier).toFixed(2);
 
-            // Display results
-            document.getElementById('multiplier').innerText = multiplier;
+            // Display the results
             document.getElementById('betAmountDisplay').innerText = betAmount;
+            document.getElementById('multiplier').innerText = multiplier;
             document.getElementById('winnings').innerText = winnings;
         });
 
-        // Set up event listener for restarting the game
+        // Reset the game
         document.getElementById('resetButton').addEventListener('click', function() {
-            // Reset the game
             document.getElementById('betAmount').value = '';
             document.querySelector('.bet-section').style.display = 'block';
             document.getElementById('gameResult').style.display = 'none';
@@ -141,4 +160,3 @@
     </script>
 </body>
 </html>
-
