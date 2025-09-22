@@ -1,107 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aviator - Prédicteur IA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aviator — Prédicteur IA</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Segoe UI, Arial;
-      background: #0d1117;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 26px;
-      margin-bottom: 12px;
-      color: #facc15;
-    }
-    p {
-      color: #ccc;
-      margin-bottom: 20px;
-    }
+    * { box-sizing: border-box; }
+    html,body { margin:0; padding:0; height:100%; background:#0d1117; color:#fff; font-family:"Segoe UI", Tahoma, Arial; }
+    .wrap { max-width:820px; margin:30px auto; padding:20px; }
 
-    .btn-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 360px;
-      margin: 0 auto;
-    }
+    .card { background:#101216; border-radius:12px; padding:22px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align:center; }
+    h1 { color:#facc15; margin:0 0 8px; font-size:26px; }
+    p.sub { color:#bfc7c5; margin:8px 0 18px; }
 
-    .yellow-btn {
+    /* большие желтые кнопки */
+    .controls { display:flex; flex-direction:column; gap:18px; align-items:center; max-width:360px; margin: 0 auto; }
+    .ybtn {
       background: #facc15;
       color: #000;
       border: none;
-      border-radius: 12px;
-      padding: 20px;
-      font-size: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      border-radius:12px;
+      padding:20px;
+      font-size:20px;
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .16s ease, box-shadow .16s ease;
+      width:100%;
+    }
+    .ybtn:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.45); }
+
+    .signal {
+      margin-top:26px;
+      font-size:48px;
+      font-weight:900;
+      color:#00ff99;
+      padding:18px 24px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
+      display:inline-block;
+      min-width:320px;
+      text-align:center;
+      transform: scale(1);
+      transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
     }
 
-    .yellow-btn:hover {
-      transform: scale(1.08);
-      opacity: 0.9;
+    /* эффект "взрыва" сигнала */
+    .signal.pop {
+      transform: scale(1.22);
+      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
+      text-shadow: 0 0 12px rgba(0,255,153,0.35);
     }
 
-    .result {
-      margin-top: 30px;
-      font-size: 22px;
-      font-weight: 700;
-      color: #3ee6a8;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s ease;
-    }
+    .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
 
-    .result.show {
-      opacity: 1;
-      transform: scale(1.1);
-      text-shadow: 0 0 15px #3ee6a8, 0 0 25px #22c55e;
+    /* плавный fade для появления */
+    .fade {
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity .36s ease, transform .36s ease;
+    }
+    .fade.show { opacity:1; transform: translateY(0); }
+
+    @media(min-width:720px){
+      .controls { flex-direction:row; gap:16px; }
+      .ybtn { width:220px; }
+      .signal { min-width:420px; font-size:56px; }
     }
   </style>
 </head>
 <body>
-  <h1>Prédicteur Aviator</h1>
-  <p>Choisissez une option ci-dessous pour obtenir une mise ou un signal.</p>
+  <div class="wrap">
+    <div class="card">
+      <h1>Prédicteur Aviator</h1>
+      <p class="sub">Appuyez sur «Obtenir la mise» pour une mise (XOF) ou sur «Obtenir le signal» pour voir le signal IA.</p>
 
-  <div class="btn-wrap">
-    <button class="yellow-btn" id="getStake">Obtenir la mise</button>
-    <button class="yellow-btn" id="getSignal">Obtenir le signal</button>
+      <div id="signal" class="signal">GET YOUR SIGNAL</div>
+
+      <div class="controls" style="margin-top:22px;">
+        <button id="btnBet" class="ybtn">Obtenir la mise</button>
+        <button id="btnSignal" class="ybtn">Obtenir le signal</button>
+      </div>
+
+      <div id="meta" class="meta"></div>
+    </div>
   </div>
 
-  <div class="result" id="result"></div>
-
   <script>
-    const resultBox = document.getElementById("result");
-    const stakeBtn = document.getElementById("getStake");
-    const signalBtn = document.getElementById("getSignal");
+    console.log('aviator.html loaded');
+    const btnBet = document.getElementById('btnBet');
+    const btnSignal = document.getElementById('btnSignal');
+    const signalEl = document.getElementById('signal');
+    const meta = document.getElementById('meta');
 
-    function showResult(text) {
-      resultBox.textContent = text;
-      resultBox.classList.remove("show");
-      setTimeout(() => resultBox.classList.add("show"), 50);
+    // показать user id если передан
+    const params = new URLSearchParams(location.search);
+    const user = params.get('user');
+    if (user) {
+      meta.textContent = 'Votre ID: ' + decodeURIComponent(user);
+      console.log('Aviator ouvert avec user=', user);
+    } else {
+      meta.textContent = '';
     }
 
-    stakeBtn.addEventListener("click", () => {
-      const randomStake = Math.floor(Math.random() * (3000 - 1200 + 1)) + 1200;
-      showResult(`💰 Mise recommandée : ${randomStake} XOF`);
+    function animateSignalOnce(text) {
+      // обновить текст, дать эффект pop, затем откат
+      signalEl.textContent = text;
+      signalEl.classList.remove('pop');
+      void signalEl.offsetWidth; // reflow для сброса анимации
+      signalEl.classList.add('pop');
+      // скрыть pop через 700ms
+      setTimeout(() => {
+        signalEl.classList.remove('pop');
+      }, 700);
+    }
+
+    btnBet.addEventListener('click', () => {
+      const min = 1200, max = 3000;
+      const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+      animateSignalOnce(amount + ' XOF');
+      meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+      meta.classList.add('fade');
+      setTimeout(()=> meta.classList.add('show'), 40);
+      setTimeout(()=> { meta.classList.remove('show'); }, 1400);
+      console.log('bet generated:', amount);
     });
 
-    signalBtn.addEventListener("click", () => {
-      const signals = [
-        "📈 Montez à 2.5x et encaissez !",
-        "📈 Encaissez à 3.1x",
-        "📉 Risque élevé, encaissez à 1.8x",
-        "📈 Opportunité rare : tenez jusqu’à 4.0x",
-        "📉 Prudence : encaissez rapidement à 1.5x"
-      ];
-      const pick = signals[Math.floor(Math.random() * signals.length)];
-      showResult(`🔮 Signal IA : ${pick}`);
+    btnSignal.addEventListener('click', () => {
+      // генерируем множитель от 1.20 до 4.00 (немного шире), но ловим до 2 знаков
+      let mult = Math.random() * (4 - 1.2) + 1.2;
+      mult = Math.round(mult * 100) / 100;
+      const text = mult.toFixed(2) + 'x';
+      animateSignalOnce(text);
+      meta.textContent = 'Signal IA: ' + text;
+      meta.classList.add('fade');
+      setTimeout(()=> meta.classList.add('show'), 40);
+      setTimeout(()=> { meta.classList.remove('show'); }, 1400);
+      console.log('signal generated:', text);
     });
   </script>
 </body>
