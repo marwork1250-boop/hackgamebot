@@ -1,162 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Game Bot</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BETWINNER BURKINA FASO</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d1117;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2b2d42;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-        }
+    header {
+      width: 100%;
+      background-color: #161b22;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
 
-        .container {
-            background-color: #1f1f30;
-            border-radius: 10px;
-            width: 350px;
-            padding: 30px;
-            text-align: center;
-        }
+    .logo {
+      color: #3ee6a8;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-        h1 {
-            font-size: 30px;
-            margin-bottom: 20px;
-        }
+    nav a {
+      margin-left: 20px;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
+    }
 
-        p {
-            font-size: 14px;
-            color: #bbb;
-            margin-bottom: 30px;
-        }
+    nav a:hover {
+      color: white;
+    }
 
-        .bet-section input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 15px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
-        }
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      margin: 40px 0 10px;
+    }
 
-        .bet-section button {
-            padding: 15px 20px;
-            font-size: 18px;
-            background-color: #ff7e00;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
+    p {
+      font-size: 16px;
+      text-align: center;
+      max-width: 600px;
+      color: #aaa;
+    }
 
-        .bet-section button:hover {
-            background-color: #e66a00;
-        }
+    .btn-container {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 300px;
+    }
 
-        .game-result {
-            background-color: #333;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            display: none;
-        }
+    .game-btn {
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
 
-        .game-result h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+    .game-btn.blue {
+      background-color: #2563eb;
+      color: white;
+    }
 
-        .game-result p {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+    .game-btn.purple {
+      background-color: #7c3aed;
+      color: white;
+    }
 
-        .game-result .multiplier {
-            color: #ff7e00;
-            font-size: 28px;
-            font-weight: bold;
-        }
+    .game-btn:hover {
+      opacity: 0.9;
+    }
 
-        .game-result button {
-            background-color: #f44336;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
+    #idModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
-        .game-result button:hover {
-            background-color: #e21e19;
-        }
+    .modal-content {
+      background-color: #1f2937;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
 
-    </style>
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .modal-content button {
+      padding: 12px 20px;
+      border: none;
+      background-color: #22c55e;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .modal-content button:hover {
+      background-color: #16a34a;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .access-granted {
+      color: #22c55e;
+      font-size: 16px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Aviator Game Bot</h1>
-        <p>Place your bet and try to predict the outcome!</p>
 
-        <div class="bet-section">
-            <input type="number" id="betAmount" placeholder="Enter bet amount in XOF" />
-            <button id="placeBetButton">Place Bet</button>
-        </div>
+  <header>
+    <div class="logo">BETWINNER BURKINA FASO</div>
+    <nav>
+      <a href="#">How It Works</a>
+      <a href="#">Games</a>
+      <a href="#">Get Started</a>
+    </nav>
+  </header>
 
-        <div class="game-result" id="gameResult">
-            <h2>Game Result</h2>
-            <p>Your bet: <span id="betAmountDisplay">0</span> XOF</p>
-            <p>Multiplier: <span class="multiplier" id="multiplier">1.00</span>x</p>
-            <p>Your winnings: <span id="winnings">0</span> XOF</p>
-            <button id="resetButton">Play Again</button>
-        </div>
+  <h1>Earn Real Money with AI Game Predictions</h1>
+  <p>Join thousands of Burkinabè players using our smart AI to win in popular games.<br/>
+  96% signal accuracy, real-time predictions, and fast withdrawals!</p>
+
+  <div class="btn-container">
+    <button class="game-btn blue" onclick="showModal('Aviator')">Aviator Prediction</button>
+    <button class="game-btn purple" onclick="showModal('Mines')">Mines Prediction</button>
+    <button class="game-btn purple" onclick="showModal('Penalty')">Penalty Prediction</button>
+    <button class="game-btn blue" onclick="showModal('Chicken Road')">Chicken Road Prediction</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="idModal">
+    <div class="modal-content">
+      <h2>Enter Your ID</h2>
+      <input type="text" id="userIdInput" placeholder="Your Player ID" />
+      <div class="error" id="errorText"></div>
+      <div class="access-granted" id="accessGranted" style="display:none;">✅ Access Granted</div>
+      <button onclick="validateId()">Submit</button>
     </div>
+  </div>
 
-    <script>
-        // Place bet event
-        document.getElementById('placeBetButton').addEventListener('click', function() {
-            const betAmount = parseFloat(document.getElementById('betAmount').value);
+  <script>
+    function showModal(gameName) {
+      document.getElementById("idModal").style.display = "flex";
+      document.getElementById("userIdInput").value = "";
+      document.getElementById("errorText").innerText = "";
+      document.getElementById("accessGranted").style.display = "none";
+    }
 
-            if (isNaN(betAmount) || betAmount <= 0) {
-                alert('Please enter a valid bet amount.');
-                return;
-            }
+    function validateId() {
+      const userId = document.getElementById("userIdInput").value.trim();
+      const errorText = document.getElementById("errorText");
+      const accessGranted = document.getElementById("accessGranted");
 
-            // Hide bet section and show game result
-            document.querySelector('.bet-section').style.display = 'none';
-            document.getElementById('gameResult').style.display = 'block';
+      if (userId.length < 7) {
+        errorText.innerText = "ID must be at least 7 characters.";
+        accessGranted.style.display = "none";
+      } else {
+        errorText.innerText = "";
+        accessGranted.style.display = "block";
+        // здесь ты можешь перенаправить или показать новый блок
+        // window.location.href = "your-next-page.html"; // если хочешь перенаправление
+      }
+    }
 
-            // Simulate random multiplier between 1.5 and 10
-            const multiplier = (Math.random() * (10 - 1.5) + 1.5).toFixed(2);
+    // Закрытие модалки по клику вне неё
+    window.onclick = function(e) {
+      if (e.target.id === "idModal") {
+        document.getElementById("idModal").style.display = "none";
+      }
+    }
+  </script>
 
-            // Calculate winnings
-            const winnings = (betAmount * multiplier).toFixed(2);
-
-            // Display the results
-            document.getElementById('betAmountDisplay').innerText = betAmount;
-            document.getElementById('multiplier').innerText = multiplier;
-            document.getElementById('winnings').innerText = winnings;
-        });
-
-        // Reset the game
-        document.getElementById('resetButton').addEventListener('click', function() {
-            document.getElementById('betAmount').value = '';
-            document.querySelector('.bet-section').style.display = 'block';
-            document.getElementById('gameResult').style.display = 'none';
-        });
-    </script>
 </body>
 </html>
+
