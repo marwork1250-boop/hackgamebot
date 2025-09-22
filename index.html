@@ -1,169 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BETWINNER BURKINA FASO</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0d0d0d;
-      color: white;
-      overflow-x: hidden;
-    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;height:100%;overflow-x:hidden;background:#0d1117;color:#fff;font-family:Segoe UI,Arial}
+    .site{max-width:980px;margin:0 auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+    .logo{color:#3ee6a8;font-weight:700}
+    .nav a{color:#ccc;margin-left:18px;text-decoration:none}
+    main{display:flex;flex-direction:column;align-items:center;padding:40px 10px}
+    h1{font-size:28px;margin:6px 0}
+    p.lead{color:#aaa;max-width:640px;text-align:center}
+    .btn-container{margin-top:30px;display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}
+    .game-btn{padding:12px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+    .game-btn.blue{background:#2563eb;color:#fff}
+    .game-btn.purple{background:#7c3aed;color:#fff}
+    footer{margin-top:60px;text-align:center;color:#777;padding:10px 0}
 
-    header {
-      background: #111;
-      padding: 15px;
-      text-align: center;
-      color: #ffcc00;
-      font-weight: bold;
-      font-size: 22px;
-    }
+    #idModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);justify-content:center;align-items:center;z-index:1000}
+    .modal-wrap{background:#1f2937;padding:24px;border-radius:10px;width:90%;max-width:420px;text-align:center}
+    .modal-wrap input{width:100%;padding:12px;border-radius:6px;border:none;font-size:16px;margin-top:12px}
+    .modal-wrap .submit{margin-top:12px;padding:12px 18px;border-radius:6px;border:none;background:#22c55e;color:#fff;font-weight:700;cursor:pointer}
+    .modal-wrap .error{color:#ff8a8a;margin-top:8px;font-size:14px}
+    .modal-wrap .access{color:#9ef08f;margin-top:8px;font-weight:700}
 
-    main {
-      text-align: center;
-      padding: 30px;
-    }
-
-    h1 {
-      color: #ffcc00;
-    }
-
-    p {
-      max-width: 500px;
-      margin: 10px auto 20px;
-      color: #ccc;
-    }
-
-    .btn {
-      display: block;
-      margin: 15px auto;
-      padding: 14px 25px;
-      border: none;
-      border-radius: 6px;
-      background: #ffcc00;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      width: 80%;
-      max-width: 280px;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background: #e6b800;
-    }
-
-    footer {
-      margin-top: 50px;
-      padding: 15px;
-      text-align: center;
-      font-size: 14px;
-      color: #777;
-      border-top: 1px solid #333;
-    }
-
-    /* Модалка */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #1a1a1a;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-    }
-
-    .modal input {
-      width: 80%;
-      padding: 10px;
-      margin: 15px 0;
-      border: none;
-      border-radius: 6px;
-      outline: none;
-    }
-
-    .modal .btn {
-      width: 100%;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 24px;
-      cursor: pointer;
+    @media(min-width:720px){
+      .btn-container{flex-direction:row;justify-content:center}
+      .btn-container .game-btn{width:160px}
     }
   </style>
 </head>
 <body>
+  <div class="site">
+    <header>
+      <div class="logo">BETWINNER BURKINA FASO</div>
+      <nav class="nav">
+        <a href="#how">Comment ça marche</a>
+        <a href="#">Jeux</a>
+      </nav>
+    </header>
 
-  <header>BETWINNER BURKINA FASO</header>
+    <main>
+      <h1>Gagnez de l’argent réel avec les prédictions IA</h1>
+      <p class="lead">Rejoignez des milliers de joueurs burkinabè qui utilisent notre IA intelligente pour gagner aux jeux populaires. 96% de précision des signaux, prédictions en temps réel et retraits rapides !</p>
 
-  <main>
-    <h1>Welcome</h1>
-    <p>Choose your game and start winning with BETWINNER!</p>
-    <button class="btn" onclick="openModal('aviator.html')">Aviator</button>
-    <button class="btn" onclick="openModal('mines.html')">Mines</button>
-    <button class="btn" onclick="openModal('penalty.html')">Penalty</button>
-    <button class="btn" onclick="openModal('chicken.html')">Chicken Road</button>
-  </main>
+      <div class="btn-container">
+        <button class="game-btn blue" data-target="aviator.html">Aviator</button>
+        <button class="game-btn purple" data-target="mines.html">Mines</button>
+        <button class="game-btn purple" data-target="penalty.html">Penalty</button>
+        <button class="game-btn blue" data-target="chicken.html">Chicken Road</button>
+      </div>
+    </main>
 
-  <footer>
-    © 2025 BETWINNER BURKINA FASO. All rights reserved.
-  </footer>
+    <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
+  </div>
 
-  <!-- Модалка -->
-  <div class="modal" id="idModal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Enter your ID</h2>
-      <input type="text" id="userId" placeholder="Enter ID (min 7 chars)">
-      <button class="btn" onclick="verifyId()">Verify</button>
-      <p id="errorMsg" style="color:red;"></p>
+  <div id="idModal">
+    <div class="modal-wrap" role="dialog" aria-modal="true">
+      <h2>Entrez votre ID</h2>
+      <input id="userIdInput" type="text" placeholder="ID joueur (min 7 caractères)" />
+      <div class="error" id="errorText"></div>
+      <div class="access" id="accessGranted" style="display:none">✅ Accès autorisé</div>
+      <button class="submit" id="modalSubmit">Valider</button>
     </div>
   </div>
 
   <script>
-    let redirectUrl = "";
+    const buttons = document.querySelectorAll('.game-btn');
+    const modal = document.getElementById('idModal');
+    const userIdInput = document.getElementById('userIdInput');
+    const errorText = document.getElementById('errorText');
+    const accessGranted = document.getElementById('accessGranted');
+    const submitBtn = document.getElementById('modalSubmit');
 
-    function openModal(url) {
-      redirectUrl = url;
-      document.getElementById("idModal").style.display = "flex";
-    }
+    let redirectTarget = 'aviator.html';
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        redirectTarget = btn.dataset.target || 'aviator.html';
+        errorText.textContent = '';
+        accessGranted.style.display = 'none';
+        userIdInput.value = '';
+        modal.style.display = 'flex';
+        setTimeout(()=>userIdInput.focus(),50);
+      });
+    });
 
-    function closeModal() {
-      document.getElementById("idModal").style.display = "none";
-    }
-
-    function verifyId() {
-      let userId = document.getElementById("userId").value;
-      if (userId.length >= 7) {
-        window.location.href = redirectUrl; 
-      } else {
-        document.getElementById("errorMsg").innerText = "❌ ID must be at least 7 characters.";
+    submitBtn.addEventListener('click', () => {
+      const id = (userIdInput.value || '').trim();
+      if (id.length < 7) {
+        errorText.textContent = 'L’ID doit contenir au moins 7 caractères.';
+        accessGranted.style.display = 'none';
+        return;
       }
-    }
+      errorText.textContent = '';
+      accessGranted.style.display = 'block';
+      setTimeout(()=>{
+        modal.style.display = 'none';
+        const url = redirectTarget + '?user=' + encodeURIComponent(id);
+        location.assign(url);
+      }, 600);
+    });
 
-    window.onclick = function(event) {
-      let modal = document.getElementById("idModal");
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
   </script>
-
 </body>
 </html>
+
