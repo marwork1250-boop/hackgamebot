@@ -267,3 +267,24 @@
     function showModal() {
       document.getElementById("idModal").style.display = "flex";
       document.getElementById("userIdInput").value = "";
+      document.getElementById("errorText").innerText = "";
+      document.getElementById("accessGranted").style.display = "none";
+    }
+
+    function validateId() {
+      const userId = document.getElementById("userIdInput").value.trim();
+      const errorText = document.getElementById("errorText");
+      const accessGranted = document.getElementById("accessGranted");
+
+      if (userId.length < 7) {
+        errorText.innerText = "ID must be at least 7 characters.";
+        accessGranted.style.display = "none";
+      } else {
+        errorText.innerText = "";
+        accessGranted.style.display = "block";
+      }
+    }
+
+    window.onclick = function(e) {
+      if (e.target.id
+
