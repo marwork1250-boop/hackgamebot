@@ -1,101 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aviator — Prédicteur IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviator - Prédicteur IA</title>
   <style>
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:#0d1117;color:#fff;font-family:Segoe UI,Arial;overflow-x:hidden}
-    .wrap{max-width:720px;margin:40px auto;padding:24px}
-    .card{background:#121318;border-radius:12px;padding:22px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-    .title{display:flex;justify-content:space-between;align-items:center}
-    h1{color:#ffcc00;margin:0;font-size:22px}
-    .sub{color:#aaa;margin-top:8px}
-    .signal-box{margin:20px auto;padding:28px;border-radius:10px;background:#1e272b;color:#00ff99;font-weight:800;font-size:40px;text-align:center;
-      text-shadow:0 0 6px rgba(0,255,153,0.25); transition:transform .18s ease,box-shadow .18s ease;}
-    .signal-box.pop { transform: scale(1.12); box-shadow:0 8px 40px rgba(0,255,153,0.14); }
-    .controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px}
-    .ybtn{background:#ffcc00;color:#000;border:none;padding:12px 18px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4);
-      transition:transform .15s ease,box-shadow .15s ease}
-    .ybtn:hover{transform:translateY(-6px);box-shadow:0 14px 26px rgba(0,0,0,0.5)}
-    .info{margin-top:12px;text-align:center;color:#ffd86b;font-weight:700}
-    .small{font-size:14px;color:#bfc7c5;margin-top:8px;text-align:center}
-    .back{display:inline-block;margin-top:18px;padding:8px 12px;border-radius:8px;background:#2b6be6;color:#fff;text-decoration:none;font-weight:700}
-    .bet-text{font-size:18px;color:#ffd86b;min-height:24px;transition:transform .16s ease}
-    .bet-text.pop{transform:scale(1.08)}
-    @keyframes neonPulse {
-      0%{text-shadow:0 0 6px rgba(0,255,153,0.18)}
-      50%{text-shadow:0 0 18px rgba(0,255,153,0.28)}
-      100%{text-shadow:0 0 6px rgba(0,255,153,0.18)}
+    body {
+      margin: 0;
+      font-family: Segoe UI, Arial;
+      background: #0d1117;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 12px;
+      color: #facc15;
+    }
+    p {
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .btn-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .yellow-btn {
+      background: #facc15;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .yellow-btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #3ee6a8;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="title">
-        <h1>Prédicteur de signaux Aviator</h1>
-        <a class="back" href="index.html">← Retour</a>
-      </div>
+  <h1>Prédicteur Aviator</h1>
+  <p>Choisissez une option ci-dessous pour obtenir une mise ou un signal.</p>
 
-      <p class="sub">Cliquez sur « Obtenir la mise » pour générer un montant en XOF. Cliquez sur « Obtenir le signal » pour voir le signal.</p>
-
-      <div id="signalBox" class="signal-box">OBTENEZ VOTRE SIGNAL</div>
-
-      <div class="controls">
-        <button id="btnBet" class="ybtn">Obtenir la mise</button>
-        <button id="btnSignal" class="ybtn">Obtenir le signal</button>
-      </div>
-
-      <div class="info">
-        <div id="betAmountText" class="bet-text"></div>
-        <div id="userInfo" class="small"></div>
-      </div>
-    </div>
+  <div class="btn-wrap">
+    <button class="yellow-btn" id="getStake">Obtenir la mise</button>
+    <button class="yellow-btn" id="getSignal">Obtenir le signal</button>
   </div>
 
+  <div class="result" id="result"></div>
+
   <script>
-    function getQueryParam(name){
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
+    const resultBox = document.getElementById("result");
+    const stakeBtn = document.getElementById("getStake");
+    const signalBtn = document.getElementById("getSignal");
 
-    const btnBet = document.getElementById('btnBet');
-    const btnSignal = document.getElementById('btnSignal');
-    const signalBox = document.getElementById('signalBox');
-    const betAmountText = document.getElementById('betAmountText');
-    const userInfo = document.getElementById('userInfo');
-
-    const userId = getQueryParam('user');
-    if (userId) {
-      userInfo.textContent = 'Votre ID : ' + decodeURIComponent(userId);
-    }
-
-    function formatNumber(n){
-      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-
-    btnBet.addEventListener('click', ()=> {
-      const min = 1200, max = 3000;
-      let amount = Math.floor(Math.random() * (max - min + 1)) + min;
-      betAmountText.textContent = 'Mise : ' + formatNumber(amount) + ' XOF';
-      betAmountText.classList.add('pop');
-      setTimeout(()=>betAmountText.classList.remove('pop'), 220);
+    stakeBtn.addEventListener("click", () => {
+      const randomStake = Math.floor(Math.random() * (3000 - 1200 + 1)) + 1200;
+      resultBox.textContent = `💰 Mise recommandée : ${randomStake} XOF`;
     });
 
-    btnSignal.addEventListener('click', ()=> {
-      let mult = (Math.random() * (3 - 1.2) + 1.2);
-      mult = Math.round(mult * 100) / 100;
-      const text = mult.toFixed(2) + 'x';
-      signalBox.textContent = text;
-      signalBox.classList.add('pop');
-      signalBox.style.animation = 'neonPulse 1.6s ease';
-      setTimeout(()=>{
-        signalBox.classList.remove('pop');
-        signalBox.style.animation = '';
-      }, 700);
+    signalBtn.addEventListener("click", () => {
+      const signals = [
+        "📈 Montez à 2.5x et encaissez !",
+        "📈 Encaissez à 3.1x",
+        "📉 Risque élevé, encaissez à 1.8x",
+        "📈 Opportunité rare : tenez jusqu’à 4.0x",
+        "📉 Prudence : encaissez rapidement à 1.5x"
+      ];
+      const pick = signals[Math.floor(Math.random() * signals.length)];
+      resultBox.textContent = `🔮 Signal IA : ${pick}`;
     });
   </script>
 </body>
 </html>
+
