@@ -180,6 +180,7 @@
 
     // Открыть модалку перед игрой Mines
     document.getElementById('minesBtn').addEventListener('click', function () {
+      // Показываем модальное окно для ввода ID
       redirectTarget = 'mines';
       errText.textContent = '';
       okText.style.display = 'none';
@@ -223,8 +224,8 @@
     btnBet.addEventListener('click', () => {
       const min = 1200, max = 3000;
       const amount = Math.floor(Math.random() * (max - min + 1)) + min;
-      animateSignalOnce(amount + ' NGN');
-      meta.textContent = 'Votre mise : ' + amount + ' NGN';
+      animateSignalOnce(amount + ' XOF');
+      meta.textContent = 'Votre mise : ' + amount + ' XOF';
       meta.classList.add('fade');
       setTimeout(() => meta.classList.add('show'), 40);
       setTimeout(() => { meta.classList.remove('show'); }, 1400);
