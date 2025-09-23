@@ -55,7 +55,6 @@
     <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
   </div>
 
-  <!-- Модальное окно для проверки ID -->
   <div id="idModal" role="dialog" aria-modal="true">
     <div class="modal-inner" role="document">
       <h2>Entrez votre ID</h2>
@@ -67,37 +66,29 @@
   </div>
 
   <script>
-    const btns = document.querySelectorAll('.game-btn');
     const idModal = document.getElementById('idModal');
     const userIdInput = document.getElementById('userId');
     const errText = document.getElementById('errText');
     const okText = document.getElementById('okText');
     const validateBtn = document.getElementById('validateBtn');
-    const mainContent = document.getElementById('mainContent');
-
+    
     let redirectTarget = null;
 
-    // Открыть модалку перед игрой Aviator
-    document.getElementById('aviatorBtn').addEventListener('click', function () {
-      redirectTarget = 'aviator';
-      errText.textContent = '';
-      okText.style.display = 'none';
-      userIdInput.value = '';
-      idModal.style.display = 'flex';
-      setTimeout(() => userIdInput.focus(), 60);
-    });
+    function openModal(target) {
+        redirectTarget = target;
+        errText.textContent = '';
+        okText.style.display = 'none';
+        userIdInput.value = '';
+        idModal.style.display = 'flex';
+        setTimeout(() => userIdInput.focus(), 60);
+    }
 
-    // Открыть модалку перед игрой Mines
-    document.getElementById('minesBtn').addEventListener('click', function () {
-      redirectTarget = 'mines';
-      errText.textContent = '';
-      okText.style.display = 'none';
-      userIdInput.value = '';
-      idModal.style.display = 'flex';
-      setTimeout(() => userIdInput.focus(), 60);
-    });
+    document.getElementById('aviatorBtn').addEventListener('click', () => openModal('aviator'));
+    document.getElementById('minesBtn').addEventListener('click', () => openModal('mines'));
+    document.getElementById('penaltyBtn').addEventListener('click', () => openModal('penalty'));
+    // Для "Chicken Road" можно добавить аналогично:
+    // document.getElementById('chickenBtn').addEventListener('click', () => openModal('chicken'));
 
-    // Проверка ID и перенаправление на соответствующую игру
     validateBtn.addEventListener('click', function () {
       const id = (userIdInput.value || '').trim();
       if (id.length < 7) {
@@ -105,19 +96,26 @@
         okText.style.display = 'none';
         return;
       }
+      
       errText.textContent = '';
       okText.style.display = 'block';
+      
       setTimeout(() => {
         idModal.style.display = 'none';
-        if (redirectTarget === 'mines') {
-          location.assign('mines.html?user=' + encodeURIComponent(id)); // Перенаправление на Mines  ID
-        }
+        
+        // Перенаправление на нужную страницу
         if (redirectTarget === 'aviator') {
-          location.assign('aviator.html?user=' + encodeURIComponent(id)); // Перенаправление на Aviator с ID
+          location.assign('aviator.html?user=' + encodeURIComponent(id));
+        } else if (redirectTarget === 'mines') {
+          location.assign('mines.html?user=' + encodeURIComponent(id));
+        } else if (redirectTarget === 'penalty') {
+          location.assign('penalty.html?user=' + encodeURIComponent(id));
         }
-         if (redirectTarget === 'penalty.html') {
-          location.assign('pen.html?user=' + encodeURIComponent(id)); // Перенаправление на Aviator с ID
-        }
+        // Добавьте другие игры сюда:
+        // else if (redirectTarget === 'chicken') {
+        //   location.assign('chicken.html?user=' + encodeURIComponent(id));
+        // }
+
       }, 500);
     });
   </script>
