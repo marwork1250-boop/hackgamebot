@@ -179,6 +179,7 @@
     let gridSize = 5; // размер по умолчанию
     let numMines = 3; // количество мин по умолчанию
     let gameData = [];
+    let gameStarted = false; // флаг, указывающий, началась ли игра
 
     const gridSizeSelect = document.getElementById('gridSize');
     const numMinesSelect = document.getElementById('numMines');
@@ -187,12 +188,10 @@
     // Слушатели изменения значения в селектах
     gridSizeSelect.addEventListener('change', (e) => {
       gridSize = parseInt(e.target.value.split('x')[0]);
-      generateGameGrid();
     });
 
     numMinesSelect.addEventListener('change', (e) => {
       numMines = parseInt(e.target.value);
-      generateGameGrid();
     });
 
     // Функция для генерации сетки
@@ -226,11 +225,14 @@
 
         // Слушатель нажатия на клетку
         cell.addEventListener('click', () => {
-          if (gameData[i] === 'bomb') {
-            cell.classList.add('bomb');
-            alert('Boom! You lost!');
-          } else {
-            cell.classList.add('crystal');
+          if (gameStarted) {
+            if (gameData[i] === 'bomb') {
+              cell.classList.add('bomb');
+              alert('Boom! You lost!');
+              gameStarted = false;
+            } else {
+              cell.classList.add('crystal');
+            }
           }
         });
 
@@ -239,8 +241,6 @@
     }
 
     // Инициализация игры
-    generateGameGrid();
-
     const btnBet = document.getElementById('btnBet');
     const btnSignal = document.getElementById('btnSignal');
     const signalEl = document.getElementById('signal');
@@ -256,25 +256,29 @@
       }, 700);
     }
 
+    // При нажатии на кнопку "Obtenir la mise"
     btnBet.addEventListener('click', () => {
-      const min = 1200, max = 3000;
-      const amount = Math.floor(Math.random() * (max - min + 1)) + min;
-      animateSignalOnce(amount + ' XOF');
-      meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
-      meta.classList.add('fade');
-      setTimeout(() => meta.classList.add('show'), 40);
-      setTimeout(() => { meta.classList.remove('show'); }, 1400);
+      if (!gameStarted) {
+        const min = 1200, max = 3000;
+        const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+        animateSignalOnce(amount + ' XOF');
+        meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+        meta.classList.add('fade');
+        setTimeout(() => meta.classList.add('show'), 40);
+        setTimeout(() => { meta.classList.remove('show'); }, 1400);
+        gameStarted = true;
+      } else {
+        alert('Vous avez déjà commencé играть! Нажмите "Obtenir le signal"');
+      }
     });
 
+    // При нажатии на кнопку "Obtenir le signal"
     btnSignal.addEventListener('click', () => {
-      let mult = Math.random() * (4 - 1.2) + 1.2;
-      mult = Math.round(mult * 100) / 100;
-      const text = mult.toFixed(2) + 'x';
-      animateSignalOnce(text);
-      meta.textContent = 'Signal IA: ' + text;
-      meta.classList.add('fade');
-      setTimeout(() => meta.classList.add('show'), 40);
-      setTimeout(() => { meta.classList.remove('show'); }, 1400);
+      if (gameStarted) {
+        generateGameGrid();
+      } else {
+        alert('Сначала поставьте ставку');
+      }
     });
   </script>
 </body>
