@@ -342,12 +342,14 @@
                     targetZone.classList.add('active');
                 }, 400); // Задержка равна длительности анимации мяча
 
-                const goalAreaRect = goalArea.getBoundingClientRect();
+                // --- ИЗМЕНЕННЫЙ БЛОК КОДА ---
                 const targetZoneRect = targetZone.getBoundingClientRect();
                 const ballRect = soccerBall.getBoundingClientRect();
                 
-                const offsetX = targetZoneRect.left - goalAreaRect.left + (targetZoneRect.width - ballRect.width) / 2;
-                const offsetY = targetZoneRect.top - goalAreaRect.top + (targetZoneRect.height - ballRect.height) / 2;
+                // Рассчитываем смещение от ТЕКУЩЕЙ позиции центра мяча до ЦЕНТРА целевой зоны
+                const offsetX = (targetZoneRect.left + targetZoneRect.width / 2) - (ballRect.left + ballRect.width / 2);
+                const offsetY = (targetZoneRect.top + targetZoneRect.height / 2) - (ballRect.top + ballRect.height / 2);
+                // --- КОНЕЦ ИЗМЕНЕННОГО БЛОКА ---
 
                 // Запускаем анимацию полета (движение и легкое уменьшение для эффекта перспективы)
                 soccerBall.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.8)`; /* ✨ Изменение: Чуть больше уменьшение */
@@ -362,4 +364,3 @@
     </script>
 </body>
 </html>
-```
