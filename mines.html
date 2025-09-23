@@ -13,6 +13,7 @@
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
     .controls { display: flex; flex-direction: column; gap: 18px; align-items: center; max-width: 360px; margin: 0 auto; }
 
+    /* Стили для селектов */
     select {
       background: #2a2a2a;
       color: #fff;
@@ -81,6 +82,7 @@
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
 
+    /* Стили для сетки */
     .grid {
       display: grid;
       gap: 10px;
@@ -128,7 +130,7 @@
       <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
 
       <label for="gridSize">Taille de la grille</label>
-      <select id="gridSize" disabled>
+      <select id="gridSize">
         <option value="3x3">3x3</option>
         <option value="4x4">4x4</option>
         <option value="5x5" selected>5x5</option>
@@ -137,7 +139,7 @@
       </select>
 
       <label for="numMines">Nombre de mines</label>
-      <select id="numMines" disabled>
+      <select id="numMines">
         <option value="1">1 Mine</option>
         <option value="2">2 Mines</option>
         <option value="3" selected>3 Mines</option>
@@ -206,13 +208,18 @@
 
     // Генерация сетки
     function generateGameGrid() {
-      gameGrid.innerHTML = ''; // Очищаем старую сетку
-      gameData = []; // Очищаем данные
+      // Очищаем старую сетку
+      gameGrid.innerHTML = ''; 
+      gameData = []; 
+
+      // Получаем значения из выпадающих списков
+      gridSize = parseInt(gridSizeSelect.value.split('x')[0]);
+      numMines = parseInt(numMinesSelect.value);
 
       const totalCells = gridSize * gridSize;
       let minesPlaced = 0;
 
-      // Создаем сетку с кристаллами
+      // Заполняем сетку кристаллами
       for (let i = 0; i < totalCells; i++) {
         gameData.push('crystal');
       }
@@ -245,7 +252,8 @@
         gameGrid.appendChild(cell);
       });
 
-      gameGrid.style.display = 'grid'; // Показываем сетку
+      // Показываем сетку
+      gameGrid.style.display = 'grid'; 
     }
   </script>
 </body>
