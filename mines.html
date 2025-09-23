@@ -11,9 +11,7 @@
     .card { background: #101216; border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align: center; }
     h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
-    .controls { display: flex; flex-direction: column; gap: 18px; align-items: center; max-width: 360px; margin: 0 auto; }
 
-    /* Стили для селектов */
     select {
       background: #2a2a2a;
       color: #fff;
@@ -26,16 +24,8 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
     }
-
-    select:hover {
-      background: #3e3e3e;
-      transform: scale(1.05);
-    }
-
-    select:focus {
-      outline: none;
-      border: 2px solid #00ff99;
-    }
+    select:hover { background: #3e3e3e; transform: scale(1.05); }
+    select:focus { outline: none; border: 2px solid #00ff99; }
 
     .ybtn {
       background: linear-gradient(45deg, #00c6ff, #0072ff);
@@ -50,7 +40,6 @@
       width: 100%;
       min-height: 60px;
     }
-
     .ybtn:hover {
       transform: translateY(-6px);
       box-shadow: 0 14px 30px rgba(0,0,0,0.45);
@@ -71,24 +60,16 @@
       transform: scale(1);
       transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
     }
-
     .signal.pop {
       transform: scale(1.22);
       box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
       text-shadow: 0 0 12px rgba(0,255,153,0.35);
     }
-
     .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
 
-    /* Стили для сетки */
-    .grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
+    .grid { display: grid; gap: 10px; margin-top: 20px; }
     .cell {
       background-color: #333;
       border-radius: 12px;
@@ -102,35 +83,80 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-
-    .cell:hover {
-      background-color: #444;
-      transform: scale(1.05);
-    }
-
-    .bomb {
-      background-color: red;
-    }
-
-    .crystal {
-      background-color: green;
-    }
+    .cell:hover { background-color: #444; transform: scale(1.05); }
+    .bomb { background-color: red; }
+    .crystal { background-color: green; }
 
     @media(min-width:720px){
       .controls { flex-direction: row; gap: 16px; }
       .ybtn { width: 220px; }
       .signal { min-width: 420px; font-size: 56px; }
     }
+
+    /* --- Модальное окно для верификации ID --- */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: #1a1f2c;
+      padding: 30px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+    .modal input {
+      width: 80%;
+      padding: 14px;
+      margin-top: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 2px solid #444;
+      outline: none;
+      background: #2a2a2a;
+      color: #fff;
+    }
+    .modal button {
+      margin-top: 18px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      background: #00c6ff;
+      color: white;
+      cursor: pointer;
+    }
+    .modal button:hover {
+      background: #0072ff;
+    }
   </style>
 </head>
 <body>
+  <!-- Модалка для ID -->
+  <div class="modal" id="idModal">
+    <div class="modal-content">
+      <h2>Vérification d'identité</h2>
+      <p>Veuillez entrer votre ID pour continuer :</p>
+      <input type="text" id="userIdInput" placeholder="Votre ID" />
+      <br>
+      <button id="verifyBtn">Vérifier</button>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="card">
       <h1>AI Mines Predictor</h1>
       <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
 
       <label for="gridSize">Taille de la grille</label>
-      <select id="gridSize">
+      <select id="gridSize" disabled>
         <option value="3x3">3x3</option>
         <option value="4x4">4x4</option>
         <option value="5x5" selected>5x5</option>
@@ -139,7 +165,7 @@
       </select>
 
       <label for="numMines">Nombre de mines</label>
-      <select id="numMines">
+      <select id="numMines" disabled>
         <option value="1">1 Mine</option>
         <option value="2">2 Mines</option>
         <option value="3" selected>3 Mines</option>
@@ -152,13 +178,11 @@
       </select>
 
       <div class="controls">
-        <button id="btnBet" class="ybtn">Obtenir la mise</button>
+        <button id="btnBet" class="ybtn" disabled>Obtenir la mise</button>
         <button id="btnSignal" class="ybtn" disabled>Obtenir le signal</button>
       </div>
 
-      <div class="grid" id="gameGrid" style="display:none;">
-        <!-- Клетки игры будут генерироваться здесь -->
-      </div>
+      <div class="grid" id="gameGrid" style="display:none;"></div>
 
       <div id="signal" class="signal">GET YOUR SIGNAL</div>
       <div id="meta" class="meta"></div>
@@ -170,6 +194,7 @@
     let gameStarted = false;
     let gridSize = 5;
     let numMines = 3;
+    let verified = false;
 
     const btnBet = document.getElementById('btnBet');
     const btnSignal = document.getElementById('btnSignal');
@@ -178,10 +203,29 @@
     const meta = document.getElementById('meta');
     const gridSizeSelect = document.getElementById('gridSize');
     const numMinesSelect = document.getElementById('numMines');
+    const idModal = document.getElementById('idModal');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const userIdInput = document.getElementById('userIdInput');
 
-    // При нажатии на кнопку "Obtenir la mise"
+    // Верификация ID
+    verifyBtn.addEventListener('click', () => {
+      const userId = userIdInput.value.trim();
+      if (userId.length > 0) {
+        verified = true;
+        idModal.style.display = "none";
+        // Разблокируем кнопки и меню
+        btnBet.disabled = false;
+        gridSizeSelect.disabled = false;
+        numMinesSelect.disabled = false;
+        alert("ID vérifié avec succès !");
+      } else {
+        alert("Veuillez entrer un ID valide !");
+      }
+    });
+
+    // Нажатие на "Obtenir la mise"
     btnBet.addEventListener('click', () => {
-      if (!gameStarted) {
+      if (!gameStarted && verified) {
         const min = 1200, max = 3000;
         const amount = Math.floor(Math.random() * (max - min + 1)) + min;
         meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
@@ -190,41 +234,33 @@
         setTimeout(() => { meta.classList.remove('show'); }, 1400);
         btnSignal.disabled = false;
         gameStarted = true;
+      } else if (!verified) {
+        alert("Veuillez d'abord vérifier votre ID !");
       } else {
         alert('Vous avez déjà commencé jouer!');
       }
     });
 
-    // При нажатии на кнопку "Obtenir le signal"
+    // Нажатие на "Obtenir le signal"
     btnSignal.addEventListener('click', () => {
-      if (gameStarted) {
-        gridSizeSelect.disabled = false;
-        numMinesSelect.disabled = false;
+      if (gameStarted && verified) {
         generateGameGrid();
       } else {
-        alert('Veuillez d\'abord effectuer une mise!');
+        alert('Veuillez effectuer une mise d\'abord!');
       }
     });
 
     // Генерация сетки
     function generateGameGrid() {
-      // Очищаем старую сетку
       gameGrid.innerHTML = ''; 
       gameData = []; 
-
-      // Получаем значения из выпадающих списков
       gridSize = parseInt(gridSizeSelect.value.split('x')[0]);
       numMines = parseInt(numMinesSelect.value);
-
       const totalCells = gridSize * gridSize;
       let minesPlaced = 0;
 
-      // Заполняем сетку кристаллами
-      for (let i = 0; i < totalCells; i++) {
-        gameData.push('crystal');
-      }
+      for (let i = 0; i < totalCells; i++) { gameData.push('crystal'); }
 
-      // Размещаем мины случайным образом
       while (minesPlaced < numMines) {
         const randomIndex = Math.floor(Math.random() * totalCells);
         if (gameData[randomIndex] !== 'bomb') {
@@ -233,13 +269,10 @@
         }
       }
 
-      // Создаем клетки на экране
       gameData.forEach((item, index) => {
         const cell = document.createElement('div');
         cell.classList.add('cell');
         cell.classList.add(item);
-
-        // Слушатель нажатия на клетку
         cell.addEventListener('click', () => {
           if (gameData[index] === 'bomb') {
             cell.classList.add('bomb');
@@ -248,11 +281,9 @@
             cell.classList.add('crystal');
           }
         });
-
         gameGrid.appendChild(cell);
       });
 
-      // Показываем сетку
       gameGrid.style.display = 'grid'; 
     }
   </script>
