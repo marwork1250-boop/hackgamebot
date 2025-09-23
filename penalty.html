@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penalty Predictor</title>
     <style>
-        /* Импорт шрифта для схожести с дизайном */
+        /* Импорт шрифта */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
         :root {
@@ -17,19 +17,35 @@
             --active-green: #4caf50;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+        * { box-sizing: border-box; }
+
+        html, body { 
+            margin:0; 
+            padding:0; 
+            min-height:100%; 
+            overflow-x:hidden; 
+            background:#0d1117; 
+            color:#fff; 
+            font-family: 'Poppins', "Segoe UI", Tahoma, Arial; 
+        }
+
+        /* Стили для хедера и футера, взятые с главной страницы */
+        .site { max-width:980px; margin:0 auto; padding:20px; display: flex; flex-direction: column; min-height: 100vh; }
+        header { display:flex; justify-content:space-between; align-items:center; padding:12px 0; }
+        .logo { color:#3ee6a8; font-weight:700; }
+        .nav a { color:#ccc; margin-left:16px; text-decoration:none; }
+        .nav a:hover { color:#fff; }
+        footer { text-align:center; color:#777; padding:18px 0; margin-top:auto; font-size:13px; }
+        
+        .main-game-content {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            flex-grow: 1;
+            padding: 20px 0;
         }
 
+        /* Стили самой игры */
         .predictor-container {
             width: 100%;
             max-width: 400px;
@@ -40,28 +56,11 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        h1 {
+        .predictor-container h1 {
             font-size: 2em;
             color: var(--primary-yellow);
             margin-top: 0;
             margin-bottom: 20px;
-        }
-
-        .how-to-use-btn {
-            background-color: transparent;
-            border: 2px solid var(--primary-yellow);
-            color: var(--primary-yellow);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
-        }
-
-        .how-to-use-btn:hover {
-            background-color: var(--primary-yellow);
-            color: var(--bg-color);
         }
         
         .goal-area {
@@ -100,8 +99,8 @@
             height: 40px;
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Soccerball.svg');
             background-size: cover;
-            transition: all 0.5s ease-in-out;
-            /* Начальная позиция */
+            /* ✨ ИЗМЕНЕНИЕ 1: Улучшенная анимация полета */
+            transition: transform 0.4s cubic-bezier(0.5, 0, 1, 0.5);
             bottom: -60px;
             left: calc(50% - 20px);
         }
@@ -138,7 +137,7 @@
             align-items: center;
             margin-top: 20px;
             font-weight: 600;
-            visibility: hidden; /* Скрыто по умолчанию */
+            visibility: hidden;
             opacity: 0;
             transition: visibility 0s, opacity 0.3s linear;
         }
@@ -183,105 +182,55 @@
             color: #aaa;
             cursor: not-allowed;
         }
-
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.7);
-        }
-
-        .modal-content {
-            background-color: #2a2a2a;
-            margin: 15% auto;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            color: white;
-        }
-        
-        .modal-content h2 {
-            color: var(--primary-yellow);
-        }
-
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close-btn:hover,
-        .close-btn:focus {
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
     </style>
 </head>
 <body>
+    <div class="site">
+        <header>
+            <div class="logo">BETWINNER BURKINA FASO</div>
+            <nav class="nav">
+                <a href="index.html">Retour</a>
+                <a href="#">Jeux</a>
+            </nav>
+        </header>
 
-    <div class="predictor-container">
-        <h1>Penalty Predictor</h1>
-        <button class="how-to-use-btn" id="howToUseBtn">HOW TO USE BOT</button>
+        <main class="main-game-content">
+            <div class="predictor-container">
+                <h1>Penalty Predictor</h1>
+                
+                <div class="goal-area" id="goalArea">
+                    <div class="goal-grid">
+                        <div class="goal-zone" data-zone="1"></div><div class="goal-zone" data-zone="2"></div>
+                        <div class="goal-zone" data-zone="3"></div><div class="goal-zone" data-zone="4"></div>
+                        <div class="goal-zone" data-zone="5"></div><div class="goal-zone" data-zone="6"></div>
+                        <div class="goal-zone" data-zone="7"></div><div class="goal-zone" data-zone="8"></div>
+                        <div class="goal-zone" data-zone="9"></div><div class="goal-zone" data-zone="10"></div>
+                        <div class="goal-zone" data-zone="11"></div><div class="goal-zone" data-zone="12"></div>
+                    </div>
+                    <div class="soccer-ball" id="soccerBall"></div>
+                </div>
 
-        <div class="goal-area" id="goalArea">
-            <div class="goal-grid">
-                <div class="goal-zone" data-zone="1"></div>
-                <div class="goal-zone" data-zone="2"></div>
-                <div class="goal-zone" data-zone="3"></div>
-                <div class="goal-zone" data-zone="4"></div>
-                <div class="goal-zone" data-zone="5"></div>
-                <div class="goal-zone" data-zone="6"></div>
-                <div class="goal-zone" data-zone="7"></div>
-                <div class="goal-zone" data-zone="8"></div>
-                <div class="goal-zone" data-zone="9"></div>
-                <div class="goal-zone" data-zone="10"></div>
-                <div class="goal-zone" data-zone="11"></div>
-                <div class="goal-zone" data-zone="12"></div>
+                <div class="message-area">
+                    <p class="main-text" id="mainText">GET YOUR SIGNAL</p>
+                    <p class="bet-amount-text" id="betAmountText"></p>
+                </div>
+
+                <div class="signal-info" id="signalInfo">
+                    <span id="signalText">Signal: Zone 3</span>
+                    <span class="signal-status">ACTIVE</span>
+                </div>
+
+                <div class="button-container">
+                    <button class="action-btn primary" id="getBetBtn">Get bet amount</button>
+                    <button class="action-btn secondary" id="getSignalBtn">Get Signal</button>
+                </div>
             </div>
-            <div class="soccer-ball" id="soccerBall"></div>
-        </div>
+        </main>
 
-        <div class="message-area">
-            <p class="main-text" id="mainText">GET YOUR SIGNAL</p>
-            <p class="bet-amount-text" id="betAmountText"></p>
-        </div>
-
-        <div class="signal-info" id="signalInfo">
-            <span id="signalText">Signal: Zone 3</span>
-            <span class="signal-status">ACTIVE</span>
-        </div>
-
-        <div class="button-container">
-            <button class="action-btn primary" id="getBetBtn">Get bet amount</button>
-            <button class="action-btn secondary" id="getSignalBtn">Get Signal</button>
-        </div>
+        <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
     </div>
     
-    <div id="howToUseModal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>How to Use Bot</h2>
-        <p>1. Press the "Get bet amount" button to generate a random betting amount.</p>
-        <p>2. Once the amount is generated, the "Get Signal" button will become active.</p>
-        <p>3. Press "Get Signal" to receive a prediction. The bot will show you which zone to target.</p>
-        <p>4. The target zone will be highlighted in green in the goal area.</p>
-        <p>5. To start a new prediction, simply press "Get bet amount" again.</p>
-      </div>
-    </div>
-
     <script>
-        // Получаем все необходимые элементы со страницы
         const getBetBtn = document.getElementById('getBetBtn');
         const getSignalBtn = document.getElementById('getSignalBtn');
         const mainText = document.getElementById('mainText');
@@ -292,98 +241,66 @@
         const soccerBall = document.getElementById('soccerBall');
         const goalArea = document.getElementById('goalArea');
         
-        // Элементы модального окна
-        const modal = document.getElementById('howToUseModal');
-        const howToUseBtn = document.getElementById('howToUseBtn');
-        const closeBtn = document.querySelector('.close-btn');
-
-
-        // Функция для сброса состояния
         function resetState() {
             mainText.textContent = 'GET YOUR SIGNAL';
             betAmountText.textContent = '';
             signalInfo.classList.remove('visible');
-            
-            // Убираем подсветку со всех зон
             goalZones.forEach(zone => zone.classList.remove('active'));
             
-            // Возвращаем мяч на исходную позицию
-            soccerBall.style.transform = `translate(0, 0)`;
+            // Возвращаем мяч в исходное состояние (размер и позиция)
+            soccerBall.style.transform = `translate(0, 0) scale(1)`;
 
-            // Управляем кнопками
             getBetBtn.classList.add('primary');
             getBetBtn.classList.remove('secondary');
             getBetBtn.disabled = false;
-            
             getSignalBtn.classList.add('secondary');
             getSignalBtn.classList.remove('primary');
             getSignalBtn.disabled = true;
         }
 
-        // Обработчик для кнопки "Get bet amount"
         getBetBtn.addEventListener('click', () => {
-            // Сбрасываем все перед генерацией новой ставки
             resetState();
-            
-            // Генерируем случайную сумму ставки
             const randomAmount = Math.floor(Math.random() * (2500 - 500 + 1)) + 500;
-            betAmountText.textContent = `Your bet amount: ${randomAmount} NGN`;
             
-            // Активируем кнопку "Get Signal"
+            // ✨ ИЗМЕНЕНИЕ 2: Валюта заменена на XOF
+            betAmountText.textContent = `Your bet amount: ${randomAmount} XOF`;
+            
             getSignalBtn.disabled = false;
             getSignalBtn.classList.remove('secondary');
             getSignalBtn.classList.add('primary');
         });
 
-        // Обработчик для кнопки "Get Signal"
         getSignalBtn.addEventListener('click', () => {
-            // Генерируем случайный номер зоны от 1 до 12
             const randomZone = Math.floor(Math.random() * 12) + 1;
             const targetZone = document.querySelector(`.goal-zone[data-zone="${randomZone}"]`);
             
             if (targetZone) {
-                // Обновляем тексты
                 mainText.textContent = 'KICK TO THIS ZONE';
                 signalText.textContent = `Signal: Zone ${randomZone}`;
-                signalInfo.classList.add('visible');
+                
+                // Делаем подсветку и сигнал видимыми чуть позже, чтобы анимация мяча была главной
+                setTimeout(() => {
+                    signalInfo.classList.add('visible');
+                    targetZone.classList.add('active');
+                }, 100);
 
-                // Подсвечиваем активную зону
-                targetZone.classList.add('active');
-
-                // Перемещаем мяч в центр выбранной зоны
                 const goalAreaRect = goalArea.getBoundingClientRect();
                 const targetZoneRect = targetZone.getBoundingClientRect();
                 const ballRect = soccerBall.getBoundingClientRect();
                 
-                // Рассчитываем смещение
                 const offsetX = targetZoneRect.left - goalAreaRect.left + (targetZoneRect.width - ballRect.width) / 2;
                 const offsetY = targetZoneRect.top - goalAreaRect.top + (targetZoneRect.height - ballRect.height) / 2;
 
-                soccerBall.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                // Запускаем анимацию полета (движение и легкое уменьшение для эффекта перспективы)
+                soccerBall.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.9)`;
                 
-                // Блокируем кнопку после получения сигнала
                 getSignalBtn.disabled = true;
                 getSignalBtn.classList.remove('primary');
                 getSignalBtn.classList.add('secondary');
             }
         });
-
-        // Логика модального окна
-        howToUseBtn.onclick = () => {
-            modal.style.display = "block";
-        }
-        closeBtn.onclick = () => {
-            modal.style.display = "none";
-        }
-        window.onclick = (event) => {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
         
-        // Инициализация начального состояния при загрузке страницы
         resetState();
-
     </script>
 </body>
 </html>
