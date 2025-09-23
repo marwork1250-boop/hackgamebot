@@ -11,7 +11,6 @@
     .card { background: #101216; border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align: center; }
     h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
-
     select {
       background: #2a2a2a;
       color: #fff;
@@ -47,3 +46,213 @@
     }
 
     .signal {
+      margin-top:26px;
+      font-size:48px;
+      font-weight:900;
+      color:#00ff99;
+      padding:18px 24px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
+      display:inline-block;
+      min-width:320px;
+      text-align:center;
+      transform: scale(1);
+      transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
+    }
+    .signal.pop {
+      transform: scale(1.22);
+      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
+      text-shadow: 0 0 12px rgba(0,255,153,0.35);
+    }
+    .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
+    .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
+    .fade.show { opacity:1; transform: translateY(0); }
+
+    /* Стили для сетки */
+    .grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .cell {
+      background-color: #333;
+      border-radius: 12px;
+      width: 60px;       /* квадрат */
+      height: 60px;      /* квадрат */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .cell:hover {
+      background-color: #444;
+      transform: scale(1.05);
+    }
+
+    .bomb {
+      background-color: red;
+    }
+
+    .crystal {
+      background-color: green;
+    }
+
+    @media(min-width:720px){
+      .controls { flex-direction: row; gap: 16px; }
+      .ybtn { width: 220px; }
+      .signal { min-width: 420px; font-size: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>AI Mines Predictor</h1>
+      <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
+
+      <label for="gridSize">Taille de la grille</label>
+      <select id="gridSize">
+        <option value="3x3">3x3</option>
+        <option value="4x4">4x4</option>
+        <option value="5x5" selected>5x5</option>
+        <option value="6x6">6x6</option>
+        <option value="7x7">7x7</option>
+      </select>
+
+      <label for="numMines">Nombre de mines</label>
+      <select id="numMines">
+        <option value="1">1 Mine</option>
+        <option value="2">2 Mines</option>
+        <option value="3" selected>3 Mines</option>
+        <option value="4">4 Mines</option>
+        <option value="5">5 Mines</option>
+        <option value="6">6 Mines</option>
+        <option value="7">7 Mines</option>
+        <option value="10">10 Mines</option>
+        <option value="15">15 Mines</option>
+      </select>
+
+      <div class="controls">
+        <button id="btnBet" class="ybtn">Obtenir la mise</button>
+        <button id="btnSignal" class="ybtn" disabled>Obtenir le signal</button>
+      </div>
+
+      <div class="grid" id="gameGrid" style="display:none;">
+        <!-- Клетки игры будут генерироваться здесь -->
+      </div>
+
+      <div id="signal" class="signal">GET YOUR SIGNAL</div>
+      <div id="meta" class="meta"></div>
+    </div>
+  </div>
+
+  <script>
+    let gameData = [];
+    let gridSize = 5;
+    let numMines = 3;
+    let roundActive = false; // контролирует, запущен ли раунд
+
+    const btnBet = document.getElementById('btnBet');
+    const btnSignal = document.getElementById('btnSignal');
+    const gameGrid = document.getElementById('gameGrid');
+    const signalEl = document.getElementById('signal');
+    const meta = document.getElementById('meta');
+    const gridSizeSelect = document.getElementById('gridSize');
+    const numMinesSelect = document.getElementById('numMines');
+
+    // При нажатии на кнопку "Obtenir la mise"
+    btnBet.addEventListener('click', () => {
+      if (!roundActive) {
+        const min = 1200, max = 3000;
+        const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+        meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+        meta.classList.add('fade');
+        setTimeout(() => meta.classList.add('show'), 40);
+        setTimeout(() => { meta.classList.remove('show'); }, 1400);
+        btnSignal.disabled = false;
+        roundActive = true;
+      } else {
+        alert('Vous devez terminer la partie avant de recommencer.');
+      }
+    });
+
+    // При нажатии на кнопку "Obtenir le signal"
+    btnSignal.addEventListener('click', () => {
+      if (roundActive) {
+        generateGameGrid();
+      } else {
+        alert('Veuillez d\'abord effectuer une mise!');
+      }
+    });
+
+    // Генерация сетки
+    function generateGameGrid() {
+      // Очищаем старую сетку
+      gameGrid.innerHTML = '';
+      gameData = [];
+
+      // Получаем значения из выпадающих списков
+      gridSize = parseInt(gridSizeSelect.value.split('x')[0]);
+      numMines = parseInt(numMinesSelect.value);
+
+      const totalCells = gridSize * gridSize;
+      let minesPlaced = 0;
+
+      // Настраиваем шаблон сетки (строки/столбцы) — чтобы клетки были квадратными, а не линиями
+      gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+      gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
+
+      // Заполняем сетку кристаллами
+      for (let i = 0; i < totalCells; i++) {
+        gameData.push('crystal');
+      }
+
+      // Размещаем мины случайным образом
+      while (minesPlaced < numMines) {
+        const randomIndex = Math.floor(Math.random() * totalCells);
+        if (gameData[randomIndex] !== 'bomb') {
+          gameData[randomIndex] = 'bomb';
+          minesPlaced++;
+        }
+      }
+
+      // Создаем клетки на экране
+      gameData.forEach((item, index) => {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        // добавим класс элемента (bomb/crystal) чтобы показать сигнал (как в твоей логике)
+        cell.classList.add(item);
+
+        // Слушатель нажатия на клетку
+        cell.addEventListener('click', () => {
+          if (gameData[index] === 'bomb') {
+            cell.classList.add('bomb');
+            alert('💥 Boom! You lost!');
+            endRound();
+          } else {
+            cell.classList.add('crystal');
+          }
+        });
+
+        gameGrid.appendChild(cell);
+      });
+
+      // Показываем сетку
+      gameGrid.style.display = 'grid';
+    }
+
+    // Сброс раунда — пользователь сможет начать новую партию
+    function endRound() {
+      roundActive = false;
+      btnSignal.disabled = true;
+    }
+  </script>
+</body>
+</html>
