@@ -2,13 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BETWINNER BURKINA FASO</title>
   <style>
+    /* Общие стили */
     * { box-sizing: border-box; }
     html, body { margin:0; padding:0; height:100%; overflow-x:hidden; background:#0d1117; color:#fff; font-family: "Segoe UI", Tahoma, Arial; }
     .site { max-width:980px; margin:0 auto; padding:20px; }
-
+    
     header { display:flex; justify-content:space-between; align-items:center; padding:12px 0; }
     .logo { color:#3ee6a8; font-weight:700; }
     .nav a { color:#ccc; margin-left:16px; text-decoration:none; }
@@ -18,7 +19,6 @@
     h1 { font-size:30px; margin:6px 0; text-align:center; }
     p.lead { color:#aaa; max-width:720px; text-align:center; margin:6px 0 20px; }
 
-    /* большие кнопки игр */
     .btn-container {
       margin-top:28px;
       display:flex;
@@ -42,25 +42,6 @@
     .game-btn:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
 
     footer { text-align:center; color:#777; padding:18px 0; margin-top:36px; font-size:13px; }
-
-    /* Игра Mines */
-    .wrap { max-width:820px; margin:30px auto; padding:20px; }
-    .card { background:#101216; border-radius:12px; padding:22px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align:center; }
-    h1 { color:#facc15; margin:0 0 8px; font-size:26px; }
-    p.sub { color:#bfc7c5; margin:8px 0 18px; }
-
-    /* Стили для выбора сетки и количества мин */
-    select, .ybtn { background: #facc15; color: #000; font-size: 18px; padding: 10px; border-radius: 10px; border: none; cursor: pointer; transition: transform 0.16s ease, box-shadow 0.16s ease; }
-    select { width: 100%; max-width: 200px; margin: 10px 0; }
-    .ybtn:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
-
-    /* Сигнал */
-    .signal { margin-top:26px; font-size:48px; font-weight:900; color:#00ff99; padding:18px 24px; border-radius:12px; background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06)); display:inline-block; min-width:320px; text-align:center; transform: scale(1); transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease; }
-    .signal.pop { transform: scale(1.22); box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12); text-shadow: 0 0 12px rgba(0,255,153,0.35); }
-
-    /* Плавное появление */
-    .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
-    .fade.show { opacity:1; transform: translateY(0); }
 
     /* Модальное окно для проверки ID */
     #idModal {
@@ -127,60 +108,19 @@
     </div>
   </div>
 
-  <!-- Игра Mines -->
-  <div id="minesGame" class="wrap" style="display: none;">
-    <div class="card">
-      <h1>AI Mines Predictor</h1>
-      <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
-
-      <label for="gridSize">Taille de la grille</label>
-      <select id="gridSize">
-        <option value="3x3">3x3</option>
-        <option value="4x4">4x4</option>
-        <option value="5x5" selected>5x5</option>
-        <option value="6x6">6x6</option>
-        <option value="7x7">7x7</option>
-      </select>
-
-      <label for="numMines">Nombre de mines</label>
-      <select id="numMines">
-        <option value="1">1 Mine</option>
-        <option value="2">2 Mines</option>
-        <option value="3" selected>3 Mines</option>
-        <option value="4">4 Mines</option>
-        <option value="5">5 Mines</option>
-        <option value="6">6 Mines</option>
-        <option value="7">7 Mines</option>
-        <option value="10">10 Mines</option>
-        <option value="15">15 Mines</option>
-      </select>
-
-      <div class="controls">
-        <button id="btnBet" class="ybtn">Obtenir la mise</button>
-        <button id="btnSignal" class="ybtn">Obtenir le signal</button>
-      </div>
-
-      <div id="signal" class="signal">GET YOUR SIGNAL</div>
-      <div id="meta" class="meta"></div>
-    </div>
-  </div>
-
   <script>
-    console.log('index.html loaded');
     const btns = document.querySelectorAll('.game-btn');
     const idModal = document.getElementById('idModal');
     const userIdInput = document.getElementById('userId');
     const errText = document.getElementById('errText');
     const okText = document.getElementById('okText');
     const validateBtn = document.getElementById('validateBtn');
-    const minesGame = document.getElementById('minesGame');
     const mainContent = document.getElementById('mainContent');
 
     let redirectTarget = null;
 
-    // Открыть модалку перед игрой Mines
+    // Показать модальное окно ID для Mines
     document.getElementById('minesBtn').addEventListener('click', function () {
-      // Показываем модальное окно для ввода ID
       redirectTarget = 'mines';
       errText.textContent = '';
       okText.style.display = 'none';
@@ -189,6 +129,7 @@
       setTimeout(() => userIdInput.focus(), 60);
     });
 
+    // Проверка ID и открытие Mines
     validateBtn.addEventListener('click', function () {
       const id = (userIdInput.value || '').trim();
       if (id.length < 7) {
@@ -201,47 +142,11 @@
       setTimeout(() => {
         idModal.style.display = 'none';
         if (redirectTarget === 'mines') {
-          mainContent.style.display = 'none';
-          minesGame.style.display = 'block';
+          location.assign('mines.html?user=' + encodeURIComponent(id)); // Перенаправление на Mines с ID
         }
       }, 500);
     });
 
-    // Генерация ставки и сигнала для игры Mines
-    const btnBet = document.getElementById('btnBet');
-    const btnSignal = document.getElementById('btnSignal');
-    const signalEl = document.getElementById('signal');
-    const meta = document.getElementById('meta');
-
-    function animateSignalOnce(text) {
-      signalEl.textContent = text;
-      signalEl.classList.remove('pop');
-      void signalEl.offsetWidth; // force reflow
-      signalEl.classList.add('pop');
-      setTimeout(() => signalEl.classList.remove('pop'), 700);
-    }
-
-    btnBet.addEventListener('click', () => {
-      const min = 1200, max = 3000;
-      const amount = Math.floor(Math.random() * (max - min + 1)) + min;
-      animateSignalOnce(amount + ' XOF');
-      meta.textContent = 'Votre mise : ' + amount + ' XOF';
-      meta.classList.add('fade');
-      setTimeout(() => meta.classList.add('show'), 40);
-      setTimeout(() => { meta.classList.remove('show'); }, 1400);
-    });
-
-    btnSignal.addEventListener('click', () => {
-      let mult = Math.random() * (4 - 1.2) + 1.2;
-      mult = Math.round(mult * 100) / 100;
-      const text = mult.toFixed(2) + 'x';
-      animateSignalOnce(text);
-      meta.textContent = 'Signal IA : ' + text;
-      meta.classList.add('fade');
-      setTimeout(() => meta.classList.add('show'), 40);
-      setTimeout(() => { meta.classList.remove('show'); }, 1400);
-    });
   </script>
 </body>
 </html>
-
