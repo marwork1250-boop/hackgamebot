@@ -12,13 +12,51 @@
     h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
     .controls { display: flex; flex-direction: column; gap: 18px; align-items: center; max-width: 360px; margin: 0 auto; }
-    .ybtn { background: #facc15; color: #000; border: none; border-radius: 12px; padding: 20px; font-size: 20px; font-weight: 800; cursor: pointer; transition: transform .16s ease, box-shadow .16s ease; width: 100%; }
-    .ybtn:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.45); }
-    .signal { margin-top:26px; font-size:48px; font-weight:900; color:#00ff99; padding:18px 24px; border-radius:12px; background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06)); display:inline-block; min-width:320px; text-align:center; transform: scale(1); transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease; }
-    .signal.pop { transform: scale(1.22); box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12); text-shadow: 0 0 12px rgba(0,255,153,0.35); }
+    .ybtn {
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.3s ease;
+      width: 100%;
+      min-height: 60px;
+    }
+    .ybtn:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+    }
+    .signal {
+      margin-top:26px;
+      font-size:48px;
+      font-weight:900;
+      color:#00ff99;
+      padding:18px 24px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
+      display:inline-block;
+      min-width:320px;
+      text-align:center;
+      transform: scale(1);
+      transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
+    }
+    .signal.pop {
+      transform: scale(1.22);
+      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
+      text-shadow: 0 0 12px rgba(0,255,153,0.35);
+    }
     .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
+    @media(min-width:720px){
+      .controls { flex-direction: row; gap: 16px; }
+      .ybtn { width: 220px; }
+      .signal { min-width: 420px; font-size: 56px; }
+    }
   </style>
 </head>
 <body>
