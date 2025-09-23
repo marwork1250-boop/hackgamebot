@@ -12,6 +12,8 @@
     h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
 
+    label { display:block; margin-top:12px; margin-bottom:6px; text-align:left; max-width:300px; margin-left:auto; margin-right:auto; color:#cbd5d1; }
+
     select {
       background: #2a2a2a;
       color: #fff;
@@ -23,48 +25,43 @@
       max-width: 300px;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
+      margin: 0 auto 6px;
     }
-    select:hover { background: #3e3e3e; transform: scale(1.05); }
+    select:hover { background: #3e3e3e; transform: scale(1.02); }
     select:focus { outline: none; border: 2px solid #00ff99; }
 
+    .controls { display:flex; flex-direction:column; gap:12px; align-items:center; margin-top:14px; max-width:360px; margin-left:auto; margin-right:auto; }
     .ybtn {
       background: linear-gradient(45deg, #00c6ff, #0072ff);
       color: #fff;
       border: none;
       border-radius: 12px;
-      padding: 20px 40px;
-      font-size: 24px;
+      padding: 16px 28px;
+      font-size: 20px;
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.3s ease;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.3s ease;
       width: 100%;
-      min-height: 60px;
+      min-height:56px;
     }
-    .ybtn:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.45);
-      background: linear-gradient(45deg, #0072ff, #00c6ff);
-    }
+    .ybtn:disabled { opacity:0.45; cursor:not-allowed; transform:none; box-shadow:none; }
+    .ybtn:hover:enabled { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.45); }
 
     .signal {
       margin-top:26px;
-      font-size:48px;
+      font-size:36px;
       font-weight:900;
       color:#00ff99;
-      padding:18px 24px;
+      padding:12px 18px;
       border-radius:12px;
       background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
       display:inline-block;
-      min-width:320px;
+      min-width:260px;
       text-align:center;
       transform: scale(1);
       transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
     }
-    .signal.pop {
-      transform: scale(1.22);
-      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
-      text-shadow: 0 0 12px rgba(0,255,153,0.35);
-    }
+
     .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
@@ -73,7 +70,7 @@
     .grid {
       display: grid;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
       justify-content: center;
     }
     .cell {
@@ -84,20 +81,35 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       color: #fff;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: background 0.18s ease, transform 0.12s ease;
+      user-select: none;
     }
-    .cell:hover { background-color: #444; transform: scale(1.05); }
-    .bomb { background-color: red; }
-    .crystal { background-color: green; }
+    .cell:hover { background-color: #444; transform: scale(1.04); }
+    .cell.crystal { background-color: #0f9d58; } /* revealed safe */
+    .cell.bomb { background-color: #d9534f; }    /* revealed bomb */
+
+    .debug {
+      margin-top:18px;
+      font-size:13px;
+      color:#cbd5d1;
+      background:#0b1418;
+      border:1px solid #162022;
+      padding:10px;
+      border-radius:8px;
+      max-width:820px;
+      margin-left:auto;
+      margin-right:auto;
+      min-height:28px;
+    }
 
     @media(min-width:720px){
-      .controls { flex-direction: row; gap: 16px; }
+      .controls { flex-direction:row; gap: 16px; align-items:center; }
       .ybtn { width: 220px; }
-      .signal { min-width: 420px; font-size: 56px; }
+      .signal { min-width: 320px; font-size:44px; }
     }
   </style>
 </head>
@@ -105,10 +117,10 @@
   <div class="wrap">
     <div class="card">
       <h1>AI Mines Predictor</h1>
-      <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
+      <p class="sub">Sélectionnez la taille de la grille et le nombre de mines. Suivez strictement l'ordre : <strong>Obtenir la mise → choisir valeurs → Obtenir le signal</strong>.</p>
 
       <label for="gridSize">Taille de la grille</label>
-      <select id="gridSize">
+      <select id="gridSize" aria-label="Taille de la grille">
         <option value="3x3">3x3</option>
         <option value="4x4">4x4</option>
         <option value="5x5" selected>5x5</option>
@@ -117,7 +129,7 @@
       </select>
 
       <label for="numMines">Nombre de mines</label>
-      <select id="numMines">
+      <select id="numMines" aria-label="Nombre de mines">
         <option value="1">1 Mine</option>
         <option value="2">2 Mines</option>
         <option value="3" selected>3 Mines</option>
@@ -132,104 +144,213 @@
       <div class="controls">
         <button id="btnBet" class="ybtn">Obtenir la mise</button>
         <button id="btnSignal" class="ybtn" disabled>Obtenir le signal</button>
+        <button id="btnReset" class="ybtn" style="display:none;">Nouvelle partie</button>
       </div>
 
       <div class="grid" id="gameGrid" style="display:none;"></div>
 
       <div id="signal" class="signal">GET YOUR SIGNAL</div>
       <div id="meta" class="meta"></div>
+
+      <div id="debug" class="debug">Statut: en attente...</div>
     </div>
   </div>
 
   <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let gameData = [];
-    let gridSize = 5;
-    let numMines = 3;
-    let roundActive = false;
+  (function(){
+    // --- Защитная обёртка ---
+    document.addEventListener('DOMContentLoaded', init);
 
-    const btnBet = document.getElementById('btnBet');
-    const btnSignal = document.getElementById('btnSignal');
-    const gameGrid = document.getElementById('gameGrid');
-    const meta = document.getElementById('meta');
-    const gridSizeSelect = document.getElementById('gridSize');
-    const numMinesSelect = document.getElementById('numMines');
+    function init() {
+      // state
+      let gameData = [];
+      let gridSize = 5;
+      let numMines = 3;
+      let roundActive = false;
+      let gridVisible = false;
 
-    btnSignal.disabled = true;
-    gameGrid.style.display = 'none';
+      // DOM
+      const btnBet = document.getElementById('btnBet');
+      const btnSignal = document.getElementById('btnSignal');
+      const btnReset = document.getElementById('btnReset');
+      const gameGrid = document.getElementById('gameGrid');
+      const meta = document.getElementById('meta');
+      const gridSizeSelect = document.getElementById('gridSize');
+      const numMinesSelect = document.getElementById('numMines');
+      const debug = document.getElementById('debug');
 
-    btnBet.addEventListener('click', () => {
-      if (!roundActive) {
+      // sanity checks
+      if (!btnBet || !btnSignal || !gameGrid || !meta || !gridSizeSelect || !numMinesSelect || !debug) {
+        console.error('Missing required DOM elements. Проверьте id элементов в HTML.');
+        alert('Ошибка: отсутствуют элементы интерфейса (см. консоль).');
+        return;
+      }
+
+      // initial UI state: selects and signal disabled until "mise"
+      gridSizeSelect.disabled = true;
+      numMinesSelect.disabled = true;
+      btnSignal.disabled = true;
+      btnReset.style.display = 'none';
+      gameGrid.style.display = 'none';
+      log('Готово. Нажмите "Obtenir la mise".');
+
+      // global error catcher (показываем в debug)
+      window.addEventListener('error', function(e){
+        log('Ошибка: ' + (e.message || e.error || 'unknown'));
+        console.error(e);
+      });
+
+      // --- кнопка "Obtenir la mise" ---
+      btnBet.addEventListener('click', () => {
+        if (roundActive) {
+          alert('Vous devez terminer la partie avant de recommencer.');
+          return;
+        }
         const min = 1200, max = 3000;
         const amount = Math.floor(Math.random() * (max - min + 1)) + min;
         meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
         meta.classList.add('fade');
         setTimeout(() => meta.classList.add('show'), 40);
-        setTimeout(() => { meta.classList.remove('show'); }, 1400);
+        setTimeout(() => meta.classList.remove('show'), 1400);
+
+        // enable selects + signal button, lock bet to prevent double bet
+        gridSizeSelect.disabled = false;
+        numMinesSelect.disabled = false;
         btnSignal.disabled = false;
+        btnBet.disabled = true;
         roundActive = true;
-      } else {
-        alert('Vous devez terminer la partie avant de recommencer.');
-      }
-    });
+        gridVisible = false;
+        gameGrid.innerHTML = '';
+        gameGrid.style.display = 'none';
+        btnReset.style.display = 'none';
+        log('Mise faite: выберите настройки, затем нажмите "Obtenir le signal".');
+        console.info('Bet placed:', amount);
+      });
 
-    btnSignal.addEventListener('click', () => {
-      if (roundActive) {
+      // --- кнопка "Obtenir le signal" ---
+      btnSignal.addEventListener('click', () => {
+        if (!roundActive) {
+          alert('Veuillez d\'abord effectuer une mise!');
+          return;
+        }
+        // allow user to change selects after bet (user requested sequence: bet -> choose -> signal)
         generateGameGrid();
-      } else {
-        alert('Veuillez d\'abord effectuer une mise!');
-      }
-    });
+      });
 
-    function generateGameGrid() {
-      gameGrid.innerHTML = '';
-      gameData = [];
+      // --- кнопка "Nouvelle partie" (ручной сброс) ---
+      btnReset.addEventListener('click', () => {
+        resetRoundUI();
+        log('Сброшено вручную. Нажмите "Obtenir la mise" чтобы начать новый раунд.');
+      });
 
-      gridSize = parseInt(gridSizeSelect.value.split('x')[0]) || 5;
-      numMines = parseInt(numMinesSelect.value) || 3;
+      // generate grid
+      function generateGameGrid() {
+        try {
+          gameGrid.innerHTML = '';
+          gameData = [];
 
-      const totalCells = gridSize * gridSize;
-      let minesPlaced = 0;
+          gridSize = parseInt(gridSizeSelect.value.split('x')[0]) || 5;
+          numMines = parseInt(numMinesSelect.value) || 3;
 
-      gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
-      gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
+          const totalCells = gridSize * gridSize;
+          let minesPlaced = 0;
 
-      for (let i = 0; i < totalCells; i++) {
-        gameData.push('crystal');
-      }
+          // set grid template so cells render as a square grid
+          gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+          gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
 
-      while (minesPlaced < numMines) {
-        const randomIndex = Math.floor(Math.random() * totalCells);
-        if (gameData[randomIndex] !== 'bomb') {
-          gameData[randomIndex] = 'bomb';
-          minesPlaced++;
+          for (let i = 0; i < totalCells; i++) gameData.push('crystal');
+
+          while (minesPlaced < numMines) {
+            const idx = Math.floor(Math.random() * totalCells);
+            if (gameData[idx] !== 'bomb') {
+              gameData[idx] = 'bomb';
+              minesPlaced++;
+            }
+          }
+
+          // create cells
+          for (let i = 0; i < totalCells; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            // store index on element for easier mapping
+            cell.dataset.idx = i;
+            cell.addEventListener('click', onCellClick);
+            gameGrid.appendChild(cell);
+          }
+
+          gameGrid.style.display = 'grid';
+          gridVisible = true;
+          btnReset.style.display = 'inline-block';
+          log(`Сетка ${gridSize}×${gridSize} готова с ${numMines} минами. Открывайте клетки.`);
+          console.info('Grid generated. bombs at indexes:', gameData.map((v,i)=> v==='bomb' ? i : -1).filter(i=>i>=0));
+        } catch (err) {
+          console.error(err);
+          log('Ошибка генерации сетки: ' + (err && err.message ? err.message : String(err)));
         }
       }
 
-      gameData.forEach((item, index) => {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.addEventListener('click', () => {
-          if (!roundActive) return;
-          if (gameData[index] === 'bomb') {
-            cell.classList.add('bomb');
-            alert('💥 Boom! Vous avez perdu!');
-            endRound();
-          } else {
-            cell.classList.add('crystal');
+      // cell click handler
+      function onCellClick(e) {
+        if (!roundActive) return;
+        const idx = parseInt(this.dataset.idx);
+        if (isNaN(idx)) return;
+        // if already revealed — ignore
+        if (this.classList.contains('crystal') || this.classList.contains('bomb')) return;
+
+        if (gameData[idx] === 'bomb') {
+          // reveal bomb
+          this.classList.add('bomb');
+          revealAllBombs();
+          alert('💥 Boom! Vous avez perdu!');
+          log('Проигрыш: была найдена мина. Раунд завершён.');
+          endRound();
+        } else {
+          this.classList.add('crystal');
+          log('Открыта безопасная клетка — продолжайте.');
+        }
+      }
+
+      // reveal bombs visually after loss
+      function revealAllBombs() {
+        const cells = gameGrid.querySelectorAll('.cell');
+        gameData.forEach((v, i) => {
+          if (v === 'bomb' && cells[i]) {
+            cells[i].classList.add('bomb');
           }
         });
-        gameGrid.appendChild(cell);
-      });
+      }
 
-      gameGrid.style.display = 'grid';
-    }
+      // end round: reset controls so user can start new bet
+      function endRound() {
+        roundActive = false;
+        btnSignal.disabled = true;
+        gridSizeSelect.disabled = true;
+        numMinesSelect.disabled = true;
+        btnBet.disabled = false; // allow new bet
+        btnReset.style.display = 'inline-block';
+      }
 
-    function endRound() {
-      roundActive = false;
-      btnSignal.disabled = true;
-    }
-  });
+      // manual reset UI (clear grid but keep ability to start anew)
+      function resetRoundUI() {
+        gameGrid.innerHTML = '';
+        gameGrid.style.display = 'none';
+        gridVisible = false;
+        roundActive = false;
+        btnSignal.disabled = true;
+        gridSizeSelect.disabled = true;
+        numMinesSelect.disabled = true;
+        btnBet.disabled = false;
+        btnReset.style.display = 'none';
+      }
+
+      // helper logger
+      function log(msg) {
+        debug.textContent = 'Statut: ' + msg;
+        console.log('[Mines] ' + msg);
+      }
+    } // init end
+  })();
   </script>
 </body>
 </html>
