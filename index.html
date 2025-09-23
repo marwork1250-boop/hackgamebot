@@ -74,7 +74,6 @@
     const okText = document.getElementById('okText');
     const validateBtn = document.getElementById('validateBtn');
     const mainContent = document.getElementById('mainContent');
-
     let redirectTarget = null;
 
     // Открыть модалку перед игрой Aviator
@@ -90,6 +89,16 @@
     // Открыть модалку перед игрой Mines
     document.getElementById('minesBtn').addEventListener('click', function () {
       redirectTarget = 'mines';
+      errText.textContent = '';
+      okText.style.display = 'none';
+      userIdInput.value = '';
+      idModal.style.display = 'flex';
+      setTimeout(() => userIdInput.focus(), 60);
+    });
+
+    // Открыть модалку перед игрой Penalty
+    document.getElementById('penaltyBtn').addEventListener('click', function () {
+      redirectTarget = 'penalty';
       errText.textContent = '';
       okText.style.display = 'none';
       userIdInput.value = '';
@@ -115,8 +124,47 @@
         if (redirectTarget === 'aviator') {
           location.assign('aviator.html?user=' + encodeURIComponent(id)); // Перенаправление на Aviator с ID
         }
+        if (redirectTarget === 'penalty') {
+          location.assign('penalty.html?user=' + encodeURIComponent(id)); // Перенаправление на Penalty с ID
+        }
       }, 500);
     });
+
+    // Game logic for Penalty game page
+    if (redirectTarget === 'penalty') {
+      // Add your game logic here for penalty game once the ID is verified
+      const gameGrid = document.getElementById('gameGrid');
+      const signalEl = document.getElementById('signal');
+      const btnBet = document.getElementById('btnBet');
+      const btnSignal = document.getElementById('btnSignal');
+      const meta = document.getElementById('meta');
+      let roundActive = false;
+      let idVerified = true;
+
+      btnBet.addEventListener('click', () => {
+        if (!roundActive) {
+          const min = 1200, max = 3000;
+          const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+          meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+          meta.classList.add('fade');
+          setTimeout(() => meta.classList.add('show'), 40);
+          setTimeout(() => { meta.classList.remove('show'); }, 1400);
+          btnSignal.disabled = false;
+          roundActive = true;
+        } else {
+          alert('Vous devez terminer la partie avant de recommencer.');
+        }
+      });
+
+      btnSignal.addEventListener('click', () => {
+        if (roundActive) {
+          // Call the function to generate the game grid here
+          alert('Game start!');
+        } else {
+          alert('Veuillez d\'abord effectuer une mise!');
+        }
+      });
+    }
   </script>
 </body>
 </html>
