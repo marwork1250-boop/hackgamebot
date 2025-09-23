@@ -61,6 +61,34 @@
     /* Плавное появление */
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
+
+    /* Модальное окно для проверки ID */
+    #idModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-inner {
+      width: 92%;
+      max-width: 420px;
+      background: #1f2937;
+      padding: 22px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .modal-inner h2 { margin: 0 0 8px; color: #fff; }
+    .modal-inner input {
+      width: 100%; padding: 12px; border-radius: 8px; border: none; margin-top: 12px; font-size: 16px;
+    }
+    .modal-inner .btn-validate {
+      margin-top: 14px; padding: 12px 16px; border-radius: 8px; border: none; background: #22c55e; color: #fff; font-weight: 700; cursor: pointer;
+    }
+    .modal-inner .error { color: #ff8a8a; margin-top: 10px; }
+    .modal-inner .ok { color: #9ef08f; margin-top: 10px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -88,7 +116,18 @@
     <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
   </div>
 
-  <!-- Страница Mines -->
+  <!-- Модальное окно для проверки ID -->
+  <div id="idModal" role="dialog" aria-modal="true">
+    <div class="modal-inner" role="document">
+      <h2>Entrez votre ID</h2>
+      <input id="userId" type="text" placeholder="ID joueur (min 7 caractères)" aria-label="Player ID" />
+      <div class="error" id="errText" aria-live="polite"></div>
+      <div class="ok" id="okText" style="display:none">✅ Accès autorisé</div>
+      <button class="btn-validate" id="validateBtn">Valider</button>
+    </div>
+  </div>
+
+  <!-- Игра Mines -->
   <div id="minesGame" class="wrap" style="display: none;">
     <div class="card">
       <h1>AI Mines Predictor</h1>
@@ -127,17 +166,49 @@
   </div>
 
   <script>
-    // Код переключения между играми
-    document.getElementById('aviatorBtn').addEventListener('click', function () {
-      location.assign('aviator.html');
+    console.log('index.html loaded');
+    const btns = document.querySelectorAll('.game-btn');
+    const idModal = document.getElementById('idModal');
+    const userIdInput = document.getElementById('userId');
+    const errText = document.getElementById('errText');
+    const okText = document.getElementById('okText');
+    const validateBtn = document.getElementById('validateBtn');
+    const minesGame = document.getElementById('minesGame');
+    const mainContent = document.getElementById('mainContent');
+
+    let redirectTarget = null;
+
+    // Открыть модалку перед игрой
+    btns.forEach(b => {
+      b.addEventListener('click', function () {
+        redirectTarget = this.id === 'minesBtn' ? 'mines' : null;
+        errText.textContent = '';
+        okText.style.display = 'none';
+        userIdInput.value = '';
+        idModal.style.display = 'flex';
+        setTimeout(() => userIdInput.focus(), 60);
+      });
     });
 
-    document.getElementById('minesBtn').addEventListener('click', function () {
-      document.getElementById('mainContent').style.display = 'none';
-      document.getElementById('minesGame').style.display = 'block';
+    validateBtn.addEventListener('click', function () {
+      const id = (userIdInput.value || '').trim();
+      if (id.length < 7) {
+        errText.textContent = 'L’ID doit contenir au moins 7 caractères.';
+        okText.style.display = 'none';
+        return;
+      }
+      errText.textContent = '';
+      okText.style.display = 'block';
+      setTimeout(() => {
+        idModal.style.display = 'none';
+        if (redirectTarget === 'mines') {
+          mainContent.style.display = 'none';
+          minesGame.style.display = 'block';
+        }
+      }, 500);
     });
 
-    // Генерация ставки и сигнала для игры Mines
+    // Функции для генерации ставки и сигнала
     const btnBet = document.getElementById('btnBet');
     const btnSignal = document.getElementById('btnSignal');
     const signalEl = document.getElementById('signal');
