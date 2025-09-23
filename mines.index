@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aviator — Prédicteur IA</title>
+  <title>Mines — Prédicteur IA</title>
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; height: 100%; background: #0d1117; color: #fff; font-family: "Segoe UI", Tahoma, Arial; }
@@ -12,41 +12,13 @@
     h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
     p.sub { color: #bfc7c5; margin: 8px 0 18px; }
     .controls { display: flex; flex-direction: column; gap: 18px; align-items: center; max-width: 360px; margin: 0 auto; }
-    .ybtn {
-      background: #facc15;
-      color: #000;
-      border: none;
-      border-radius: 12px;
-      padding: 20px;
-      font-size: 20px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform .16s ease, box-shadow .16s ease;
-      width: 100%;
-    }
+    .ybtn { background: #facc15; color: #000; border: none; border-radius: 12px; padding: 20px; font-size: 20px; font-weight: 800; cursor: pointer; transition: transform .16s ease, box-shadow .16s ease; width: 100%; }
     .ybtn:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.45); }
-    .signal {
-      margin-top: 26px;
-      font-size: 48px;
-      font-weight: 900;
-      color: #00ff99;
-      padding: 18px 24px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
-      display: inline-block;
-      min-width: 320px;
-      text-align: center;
-      transform: scale(1);
-      transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
-    }
-    .signal.pop {
-      transform: scale(1.22);
-      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
-      text-shadow: 0 0 12px rgba(0,255,153,0.35);
-    }
-    .meta { margin-top: 14px; color: #ffd86b; font-weight: 700; min-height: 22px; }
-    .fade { opacity: 0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
-    .fade.show { opacity: 1; transform: translateY(0); }
+    .signal { margin-top:26px; font-size:48px; font-weight:900; color:#00ff99; padding:18px 24px; border-radius:12px; background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06)); display:inline-block; min-width:320px; text-align:center; transform: scale(1); transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease; }
+    .signal.pop { transform: scale(1.22); box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12); text-shadow: 0 0 12px rgba(0,255,153,0.35); }
+    .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
+    .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
+    .fade.show { opacity:1; transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -91,10 +63,45 @@
     // Получение ID из URL
     const params = new URLSearchParams(location.search);
     const user = params.get('user');
-    const meta = document.getElementById('meta');
     if (user) {
-      meta.textContent = 'Votre ID: ' + decodeURIComponent(user);
+      document.getElementById('meta').textContent = 'Votre ID: ' + decodeURIComponent(user);
     }
+
+    const btnBet = document.getElementById('btnBet');
+    const btnSignal = document.getElementById('btnSignal');
+    const signalEl = document.getElementById('signal');
+    const meta = document.getElementById('meta');
+
+    function animateSignalOnce(text) {
+      signalEl.textContent = text;
+      signalEl.classList.remove('pop');
+      void signalEl.offsetWidth;
+      signalEl.classList.add('pop');
+      setTimeout(() => {
+        signalEl.classList.remove('pop');
+      }, 700);
+    }
+
+    btnBet.addEventListener('click', () => {
+      const min = 1200, max = 3000;
+      const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+      animateSignalOnce(amount + ' XOF');
+      meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+      meta.classList.add('fade');
+      setTimeout(() => meta.classList.add('show'), 40);
+      setTimeout(() => { meta.classList.remove('show'); }, 1400);
+    });
+
+    btnSignal.addEventListener('click', () => {
+      let mult = Math.random() * (4 - 1.2) + 1.2;
+      mult = Math.round(mult * 100) / 100;
+      const text = mult.toFixed(2) + 'x';
+      animateSignalOnce(text);
+      meta.textContent = 'Signal IA: ' + text;
+      meta.classList.add('fade');
+      setTimeout(() => meta.classList.add('show'), 40);
+      setTimeout(() => { meta.classList.remove('show'); }, 1400);
+    });
   </script>
 </body>
 </html>
