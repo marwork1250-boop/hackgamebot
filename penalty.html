@@ -1,3 +1,15 @@
+Понял\! Чтобы сделать дизайн более современным и приятным для глаз, я внесу следующие изменения:
+
+1.  **Более мягкие тени и градиенты:** Добавлю легкие тени для глубины и, возможно, едва заметные градиенты, чтобы убрать плоские цвета.
+2.  **Улучшенная типографика:** Изменю размеры шрифтов, межстрочный интервал, чтобы текст был более читаемым и эстетичным.
+3.  **Анимации и переходы:** Увеличу плавность существующих анимаций и добавлю новые, где это уместно (например, при наведении на кнопки или изменении состояния).
+4.  **Цветовая палитра:** Немного скорректирую цвета, чтобы они были более гармоничными, возможно, добавлю чуть больше контраста для читаемости.
+5.  **Отступы и выравнивание:** Пересмотрю отступы между элементами для лучшего визуального баланса.
+6.  **Улучшение поля:** Возможно, добавлю более выразительные границы ворот или легкий фон для зон.
+
+### Прошу, замените содержимое файла `penalty.html` на следующий код:
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,15 +18,17 @@
     <title>Penalty Predictor</title>
     <style>
         /* Импорт шрифта */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap'); /* ✨ Изменение: Новый шрифт для более современного вида */
 
         :root {
-            --bg-color: #1e1e1e;
-            --primary-yellow: #fdd835;
-            --text-color: #ffffff;
-            --border-color: #555;
-            --disabled-color: #424242;
-            --active-green: #4caf50;
+            --bg-dark: #0f172a; /* Темно-синий фон */
+            --bg-medium: #1e293b; /* Чуть светлее для контейнера */
+            --bg-light: #334155; /* Для зон и неактивных кнопок */
+            --accent-yellow: #fde047; /* Яркий желтый */
+            --accent-green: #22c55e; /* Яркий зеленый */
+            --text-light: #f1f5f9; /* Светлый текст */
+            --text-muted: #94a3b8; /* Приглушенный текст */
+            --border-light: #475569; /* Светлая рамка */
         }
 
         * { box-sizing: border-box; }
@@ -24,18 +38,52 @@
             padding:0; 
             min-height:100%; 
             overflow-x:hidden; 
-            background:#0d1117; 
-            color:#fff; 
-            font-family: 'Poppins', "Segoe UI", Tahoma, Arial; 
+            background: var(--bg-dark); /* ✨ Изменение: Новый фоновый цвет */
+            color: var(--text-light); /* ✨ Изменение: Цвет текста */
+            font-family: 'Montserrat', sans-serif; /* ✨ Изменение: Применяем новый шрифт */
         }
 
-        /* Стили для хедера и футера, взятые с главной страницы */
-        .site { max-width:980px; margin:0 auto; padding:20px; display: flex; flex-direction: column; min-height: 100vh; }
-        header { display:flex; justify-content:space-between; align-items:center; padding:12px 0; }
-        .logo { color:#3ee6a8; font-weight:700; }
-        .nav a { color:#ccc; margin-left:16px; text-decoration:none; }
-        .nav a:hover { color:#fff; }
-        footer { text-align:center; color:#777; padding:18px 0; margin-top:auto; font-size:13px; }
+        /* Стили для хедера и футера */
+        .site { 
+            max-width:980px; 
+            margin:0 auto; 
+            padding:20px; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        header { 
+            display:flex; 
+            justify-content:space-between; 
+            align-items:center; 
+            padding:12px 0; 
+            border-bottom: 1px solid var(--border-light); /* ✨ Изменение: Добавлена граница */
+            margin-bottom: 20px;
+        }
+        .logo { 
+            color:#3ee6a8; 
+            font-weight:800; /* ✨ Изменение: Жирнее */
+            font-size: 1.2em;
+        }
+        .nav a { 
+            color:var(--text-muted); /* ✨ Изменение: Приглушенный цвет */
+            margin-left:18px; /* ✨ Изменение: Чуть больше отступ */
+            text-decoration:none; 
+            font-weight: 600;
+            transition: color 0.3s ease; /* ✨ Изменение: Плавный переход */
+        }
+        .nav a:hover { 
+            color:var(--text-light); /* ✨ Изменение: Белый при наведении */
+        }
+        footer { 
+            text-align:center; 
+            color:var(--text-muted); /* ✨ Изменение: Приглушенный цвет */
+            padding:18px 0; 
+            margin-top:auto; 
+            font-size:0.85em; /* ✨ Изменение: Чуть меньше размер */
+            border-top: 1px solid var(--border-light); /* ✨ Изменение: Добавлена граница */
+            padding-top: 25px;
+        }
         
         .main-game-content {
             display: flex;
@@ -43,71 +91,82 @@
             align-items: center;
             flex-grow: 1;
             padding: 20px 0;
+            width: 100%;
         }
 
         /* Стили самой игры */
         .predictor-container {
             width: 100%;
-            max-width: 400px;
-            background-color: #2a2a2a;
-            border-radius: 15px;
-            padding: 30px;
+            max-width: 420px; /* ✨ Изменение: Чуть шире */
+            background-color: var(--bg-medium); /* ✨ Изменение: Новый фоновый цвет */
+            border-radius: 18px; /* ✨ Изменение: Более округлые углы */
+            padding: 35px 25px; /* ✨ Изменение: Больше отступов */
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); /* ✨ Изменение: Более выраженная тень */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* ✨ Изменение: Тонкая светлая граница */
         }
 
         .predictor-container h1 {
-            font-size: 2em;
-            color: var(--primary-yellow);
+            font-size: 2.2em; /* ✨ Изменение: Чуть крупнее */
+            color: var(--accent-yellow); 
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 25px; /* ✨ Изменение: Больше отступ */
+            font-weight: 800; /* ✨ Изменение: Очень жирный */
+            letter-spacing: -0.5px; /* ✨ Изменение: Небольшой кернинг */
         }
         
         .goal-area {
             position: relative;
             width: 100%;
             max-width: 320px;
-            margin: 0 auto 20px;
-            border-left: 5px solid white;
-            border-right: 5px solid white;
-            border-top: 5px solid white;
+            margin: 0 auto 30px; /* ✨ Изменение: Больше отступ снизу */
+            border-left: 5px solid var(--text-light); /* ✨ Изменение: Цвет рамки ворот */
+            border-right: 5px solid var(--text-light);
+            border-top: 5px solid var(--text-light);
             padding: 10px;
             box-sizing: border-box;
+            background: linear-gradient(180deg, rgba(var(--bg-light), 0.2) 0%, rgba(var(--bg-light), 0.05) 100%); /* ✨ Изменение: Легкий градиент */
+            border-radius: 8px 8px 0 0; /* ✨ Изменение: Слегка округленные углы сверху */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3); /* ✨ Изменение: Внутренняя тень для глубины */
         }
 
         .goal-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px; /* ✨ Изменение: Чуть больше расстояние */
         }
 
         .goal-zone {
             width: 100%;
-            padding-bottom: 100%; /* Aspect ratio 1:1 */
-            background-color: var(--disabled-color);
+            padding-bottom: 100%; 
+            background-color: var(--bg-light); /* ✨ Изменение: Более мягкий цвет */
             border-radius: 50%;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* ✨ Изменение: Плавный переход */
+            cursor: default;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* ✨ Изменение: Легкая тень */
         }
         
         .goal-zone.active {
-            background-color: var(--active-green);
+            background-color: var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-green), 0 0 5px rgba(255,255,255,0.4); /* ✨ Изменение: Яркое свечение */
+            transform: scale(1.05); /* ✨ Изменение: Небольшое увеличение */
         }
 
         .soccer-ball {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 45px; /* ✨ Изменение: Чуть крупнее */
+            height: 45px;
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Soccerball.svg');
             background-size: cover;
-            /* ✨ ИЗМЕНЕНИЕ 1: Улучшенная анимация полета */
             transition: transform 0.4s cubic-bezier(0.5, 0, 1, 0.5);
-            bottom: -60px;
-            left: calc(50% - 20px);
+            bottom: -65px; /* ✨ Изменение: Скорректировано положение */
+            left: calc(50% - 22.5px); /* ✨ Изменение: Скорректировано положение */
+            z-index: 10; /* ✨ Изменение: Мяч всегда поверх */
         }
 
         .message-area {
-            min-height: 50px;
-            margin: 20px 0;
+            min-height: 60px; /* ✨ Изменение: Увеличена высота */
+            margin: 25px 0; /* ✨ Изменение: Больше отступы */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -115,31 +174,34 @@
         }
 
         .main-text {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--primary-yellow);
+            font-size: 1.6em; /* ✨ Изменение: Крупнее */
+            font-weight: 800; /* ✨ Изменение: Очень жирный */
+            color: var(--accent-yellow); 
             margin: 0;
+            letter-spacing: -0.5px;
         }
         
         .bet-amount-text {
-             font-size: 1.2em;
+             font-size: 1.3em; /* ✨ Изменение: Крупнее */
              font-weight: 600;
-             margin-top: 5px;
+             margin-top: 8px; /* ✨ Изменение: Чуть больше отступ */
+             color: var(--text-light);
         }
         
         .signal-info {
-            background-color: #333;
-            border-left: 4px solid var(--primary-yellow);
-            padding: 15px;
-            border-radius: 8px;
+            background-color: var(--bg-light); /* ✨ Изменение: Новый фон */
+            border-left: 5px solid var(--accent-yellow); /* ✨ Изменение: Цвет и толщина */
+            padding: 18px; /* ✨ Изменение: Больше отступы */
+            border-radius: 10px; /* ✨ Изменение: Более округлые */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
-            font-weight: 600;
+            margin-top: 25px; /* ✨ Изменение: Больше отступ */
+            font-weight: 700;
             visibility: hidden;
             opacity: 0;
-            transition: visibility 0s, opacity 0.3s linear;
+            transition: visibility 0s, opacity 0.4s ease; /* ✨ Изменение: Плавнее */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* ✨ Изменение: Тень */
         }
         
         .signal-info.visible {
@@ -148,39 +210,50 @@
         }
 
         .signal-status {
-            color: var(--active-green);
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .button-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 18px; /* ✨ Изменение: Больше расстояние */
+            margin-top: 30px; /* ✨ Изменение: Больше отступ */
         }
         
         .action-btn {
-            padding: 15px;
-            border-radius: 8px;
+            padding: 16px 20px; /* ✨ Изменение: Больше отступы */
+            border-radius: 10px; /* ✨ Изменение: Более округлые */
             border: none;
-            font-size: 1em;
-            font-weight: 600;
+            font-size: 1.1em; /* ✨ Изменение: Крупнее текст */
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* ✨ Изменение: Тень */
+            letter-spacing: 0.2px;
         }
         
         .action-btn.primary {
-            background-color: var(--primary-yellow);
-            color: var(--bg-color);
+            background-color: var(--accent-yellow);
+            color: var(--bg-dark); /* ✨ Изменение: Цвет текста */
         }
         
         .action-btn.primary:hover {
             filter: brightness(1.1);
+            transform: translateY(-2px); /* ✨ Изменение: Небольшой подъем при наведении */
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
         
         .action-btn.secondary {
-            background-color: var(--disabled-color);
-            color: #aaa;
+            background-color: var(--bg-light); /* ✨ Изменение: Цвет неактивной кнопки */
+            color: var(--text-muted); /* ✨ Изменение: Приглушенный текст */
             cursor: not-allowed;
+            opacity: 0.7; /* ✨ Изменение: Чуть прозрачнее */
+        }
+        .action-btn.secondary:hover {
+             transform: none; /* Отключаем подъем для неактивной */
+             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -227,7 +300,7 @@
             </div>
         </main>
 
-        <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
+        <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsibly.</footer>
     </div>
     
     <script>
@@ -247,7 +320,6 @@
             signalInfo.classList.remove('visible');
             goalZones.forEach(zone => zone.classList.remove('active'));
             
-            // Возвращаем мяч в исходное состояние (размер и позиция)
             soccerBall.style.transform = `translate(0, 0) scale(1)`;
 
             getBetBtn.classList.add('primary');
@@ -261,8 +333,6 @@
         getBetBtn.addEventListener('click', () => {
             resetState();
             const randomAmount = Math.floor(Math.random() * (2500 - 500 + 1)) + 500;
-            
-            // ✨ ИЗМЕНЕНИЕ 2: Валюта заменена на XOF
             betAmountText.textContent = `Your bet amount: ${randomAmount} XOF`;
             
             getSignalBtn.disabled = false;
@@ -278,11 +348,11 @@
                 mainText.textContent = 'KICK TO THIS ZONE';
                 signalText.textContent = `Signal: Zone ${randomZone}`;
                 
-                // Делаем подсветку и сигнал видимыми чуть позже, чтобы анимация мяча была главной
+                // Чтобы анимация мяча была видна, показываем сигнал и подсветку немного позже
                 setTimeout(() => {
                     signalInfo.classList.add('visible');
                     targetZone.classList.add('active');
-                }, 100);
+                }, 400); // Задержка равна длительности анимации мяча
 
                 const goalAreaRect = goalArea.getBoundingClientRect();
                 const targetZoneRect = targetZone.getBoundingClientRect();
@@ -292,7 +362,7 @@
                 const offsetY = targetZoneRect.top - goalAreaRect.top + (targetZoneRect.height - ballRect.height) / 2;
 
                 // Запускаем анимацию полета (движение и легкое уменьшение для эффекта перспективы)
-                soccerBall.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.9)`;
+                soccerBall.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(0.8)`; /* ✨ Изменение: Чуть больше уменьшение */
                 
                 getSignalBtn.disabled = true;
                 getSignalBtn.classList.remove('primary');
@@ -304,3 +374,4 @@
     </script>
 </body>
 </html>
+```
