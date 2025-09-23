@@ -69,10 +69,16 @@
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
 
-    .grid { display: grid; gap: 10px; margin-top: 20px; }
+    .grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
     .cell {
       background-color: #333;
       border-radius: 12px;
+      width: 60px;
       height: 60px;
       display: flex;
       align-items: center;
@@ -92,71 +98,16 @@
       .ybtn { width: 220px; }
       .signal { min-width: 420px; font-size: 56px; }
     }
-
-    /* --- Модальное окно для верификации ID --- */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    .modal-content {
-      background: #1a1f2c;
-      padding: 30px;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    }
-    .modal input {
-      width: 80%;
-      padding: 14px;
-      margin-top: 12px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: 2px solid #444;
-      outline: none;
-      background: #2a2a2a;
-      color: #fff;
-    }
-    .modal button {
-      margin-top: 18px;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      background: #00c6ff;
-      color: white;
-      cursor: pointer;
-    }
-    .modal button:hover {
-      background: #0072ff;
-    }
   </style>
 </head>
 <body>
-  <!-- Модалка для ID -->
-  <div class="modal" id="idModal">
-    <div class="modal-content">
-      <h2>Vérification d'identité</h2>
-      <p>Veuillez entrer votre ID pour continuer :</p>
-      <input type="text" id="userIdInput" placeholder="Votre ID" />
-      <br>
-      <button id="verifyBtn">Vérifier</button>
-    </div>
-  </div>
-
   <div class="wrap">
     <div class="card">
       <h1>AI Mines Predictor</h1>
       <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
 
       <label for="gridSize">Taille de la grille</label>
-      <select id="gridSize" disabled>
+      <select id="gridSize">
         <option value="3x3">3x3</option>
         <option value="4x4">4x4</option>
         <option value="5x5" selected>5x5</option>
@@ -165,7 +116,7 @@
       </select>
 
       <label for="numMines">Nombre de mines</label>
-      <select id="numMines" disabled>
+      <select id="numMines">
         <option value="1">1 Mine</option>
         <option value="2">2 Mines</option>
         <option value="3" selected>3 Mines</option>
@@ -178,7 +129,7 @@
       </select>
 
       <div class="controls">
-        <button id="btnBet" class="ybtn" disabled>Obtenir la mise</button>
+        <button id="btnBet" class="ybtn">Obtenir la mise</button>
         <button id="btnSignal" class="ybtn" disabled>Obtenir le signal</button>
       </div>
 
@@ -194,38 +145,17 @@
     let gameStarted = false;
     let gridSize = 5;
     let numMines = 3;
-    let verified = false;
 
     const btnBet = document.getElementById('btnBet');
     const btnSignal = document.getElementById('btnSignal');
     const gameGrid = document.getElementById('gameGrid');
-    const signalEl = document.getElementById('signal');
     const meta = document.getElementById('meta');
     const gridSizeSelect = document.getElementById('gridSize');
     const numMinesSelect = document.getElementById('numMines');
-    const idModal = document.getElementById('idModal');
-    const verifyBtn = document.getElementById('verifyBtn');
-    const userIdInput = document.getElementById('userIdInput');
-
-    // Верификация ID
-    verifyBtn.addEventListener('click', () => {
-      const userId = userIdInput.value.trim();
-      if (userId.length > 0) {
-        verified = true;
-        idModal.style.display = "none";
-        // Разблокируем кнопки и меню
-        btnBet.disabled = false;
-        gridSizeSelect.disabled = false;
-        numMinesSelect.disabled = false;
-        alert("ID vérifié avec succès !");
-      } else {
-        alert("Veuillez entrer un ID valide !");
-      }
-    });
 
     // Нажатие на "Obtenir la mise"
     btnBet.addEventListener('click', () => {
-      if (!gameStarted && verified) {
+      if (!gameStarted) {
         const min = 1200, max = 3000;
         const amount = Math.floor(Math.random() * (max - min + 1)) + min;
         meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
@@ -234,8 +164,6 @@
         setTimeout(() => { meta.classList.remove('show'); }, 1400);
         btnSignal.disabled = false;
         gameStarted = true;
-      } else if (!verified) {
-        alert("Veuillez d'abord vérifier votre ID !");
       } else {
         alert('Vous avez déjà commencé jouer!');
       }
@@ -243,10 +171,10 @@
 
     // Нажатие на "Obtenir le signal"
     btnSignal.addEventListener('click', () => {
-      if (gameStarted && verified) {
+      if (gameStarted) {
         generateGameGrid();
       } else {
-        alert('Veuillez effectuer une mise d\'abord!');
+        alert('Veuillez d\'abord effectuer une mise!');
       }
     });
 
@@ -254,12 +182,20 @@
     function generateGameGrid() {
       gameGrid.innerHTML = ''; 
       gameData = []; 
+
       gridSize = parseInt(gridSizeSelect.value.split('x')[0]);
       numMines = parseInt(numMinesSelect.value);
+
       const totalCells = gridSize * gridSize;
       let minesPlaced = 0;
 
-      for (let i = 0; i < totalCells; i++) { gameData.push('crystal'); }
+      // Настройка сетки в CSS
+      gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+      gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
+
+      for (let i = 0; i < totalCells; i++) {
+        gameData.push('crystal');
+      }
 
       while (minesPlaced < numMines) {
         const randomIndex = Math.floor(Math.random() * totalCells);
@@ -273,6 +209,7 @@
         const cell = document.createElement('div');
         cell.classList.add('cell');
         cell.classList.add(item);
+
         cell.addEventListener('click', () => {
           if (gameData[index] === 'bomb') {
             cell.classList.add('bomb');
@@ -281,6 +218,7 @@
             cell.classList.add('crystal');
           }
         });
+
         gameGrid.appendChild(cell);
       });
 
