@@ -77,9 +77,18 @@
 
     let redirectTarget = null;
 
+    // Открыть модалку перед игрой Aviator
+    document.getElementById('aviatorBtn').addEventListener('click', function () {
+      redirectTarget = 'aviator';
+      errText.textContent = '';
+      okText.style.display = 'none';
+      userIdInput.value = '';
+      idModal.style.display = 'flex';
+      setTimeout(() => userIdInput.focus(), 60);
+    });
+
     // Открыть модалку перед игрой Mines
     document.getElementById('minesBtn').addEventListener('click', function () {
-      // Показываем модальное окно для ввода ID
       redirectTarget = 'mines';
       errText.textContent = '';
       okText.style.display = 'none';
@@ -88,7 +97,7 @@
       setTimeout(() => userIdInput.focus(), 60);
     });
 
-    // Проверка ID и открытие Mines
+    // Проверка ID и перенаправление на соответствующую игру
     validateBtn.addEventListener('click', function () {
       const id = (userIdInput.value || '').trim();
       if (id.length < 7) {
@@ -102,6 +111,9 @@
         idModal.style.display = 'none';
         if (redirectTarget === 'mines') {
           location.assign('mines.html?user=' + encodeURIComponent(id)); // Перенаправление на Mines с ID
+        }
+        if (redirectTarget === 'aviator') {
+          location.assign('aviator.html?user=' + encodeURIComponent(id)); // Перенаправление на Aviator с ID
         }
       }, 500);
     });
