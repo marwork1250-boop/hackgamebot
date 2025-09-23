@@ -83,6 +83,41 @@
     .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
     .fade.show { opacity:1; transform: translateY(0); }
 
+    /* Стили для сетки */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cell {
+      background-color: #333;
+      border-radius: 12px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .cell:hover {
+      background-color: #444;
+      transform: scale(1.05);
+    }
+
+    .bomb {
+      background-color: red;
+    }
+
+    .crystal {
+      background-color: green;
+    }
+
     @media(min-width:720px){
       .controls { flex-direction: row; gap: 16px; }
       .ybtn { width: 220px; }
@@ -123,6 +158,10 @@
         <button id="btnSignal" class="ybtn">Obtenir le signal</button>
       </div>
 
+      <div class="grid" id="gameGrid">
+        <!-- Клетки игры будут генерироваться здесь -->
+      </div>
+
       <div id="signal" class="signal">GET YOUR SIGNAL</div>
       <div id="meta" class="meta"></div>
     </div>
@@ -135,6 +174,72 @@
     if (user) {
       document.getElementById('meta').textContent = 'Votre ID: ' + decodeURIComponent(user);
     }
+
+    // Глобальные переменные
+    let gridSize = 5; // размер по умолчанию
+    let numMines = 3; // количество мин по умолчанию
+    let gameData = [];
+
+    const gridSizeSelect = document.getElementById('gridSize');
+    const numMinesSelect = document.getElementById('numMines');
+    const gameGrid = document.getElementById('gameGrid');
+
+    // Слушатели изменения значения в селектах
+    gridSizeSelect.addEventListener('change', (e) => {
+      gridSize = parseInt(e.target.value.split('x')[0]);
+      generateGameGrid();
+    });
+
+    numMinesSelect.addEventListener('change', (e) => {
+      numMines = parseInt(e.target.value);
+      generateGameGrid();
+    });
+
+    // Функция для генерации сетки
+    function generateGameGrid() {
+      gameGrid.innerHTML = ''; // Очищаем старую сетку
+      gameData = []; // Очищаем данные
+
+      // Генерируем сетку
+      let totalCells = gridSize * gridSize;
+      let minesPlaced = 0;
+
+      // Сначала создаем пустые клетки (кристаллы)
+      for (let i = 0; i < totalCells; i++) {
+        gameData.push('crystal');
+      }
+
+      // Размещаем мины случайным образом
+      while (minesPlaced < numMines) {
+        let randomIndex = Math.floor(Math.random() * totalCells);
+        if (gameData[randomIndex] !== 'bomb') {
+          gameData[randomIndex] = 'bomb';
+          minesPlaced++;
+        }
+      }
+
+      // Создаем клетки на экране
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.classList.add(gameData[i]);
+
+        // Слушатель нажатия на клетку
+        cell.addEventListener('click', () => {
+          if (gameData[i] === 'bomb') {
+            cell.classList.add('bomb');
+            alert('Boom! You lost!');
+          } else {
+            cell.classList.add('crystal');
+          }
+        });
+
+        gameGrid.appendChild(cell);
+      }
+    }
+
+    // Инициализация игры
+    generateGameGrid();
 
     const btnBet = document.getElementById('btnBet');
     const btnSignal = document.getElementById('btnSignal');
