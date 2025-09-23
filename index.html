@@ -3,168 +3,233 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BETWINNER BURKINA FASO</title>
+  <title>Mines — Prédicteur IA</title>
   <style>
     * { box-sizing: border-box; }
-    html, body { margin:0; padding:0; height:100%; overflow-x:hidden; background:#0d1117; color:#fff; font-family: "Segoe UI", Tahoma, Arial; }
-    .site { max-width:980px; margin:0 auto; padding:20px; }
-    header { display:flex; justify-content:space-between; align-items:center; padding:12px 0; }
-    .logo { color:#3ee6a8; font-weight:700; }
-    .nav a { color:#ccc; margin-left:16px; text-decoration:none; }
-    .nav a:hover { color:#fff; }
-    main { display:flex; flex-direction:column; align-items:center; padding:36px 12px; }
-    h1 { font-size:30px; margin:6px 0; text-align:center; }
-    p.lead { color:#aaa; max-width:720px; text-align:center; margin:6px 0 20px; }
-    .btn-container { margin-top:28px; display:flex; flex-direction:column; gap:18px; width:100%; max-width:420px; }
-    .game-btn { padding:22px; font-size:20px; border-radius:12px; border: none; font-weight:800; cursor:pointer; transition: transform .16s ease, box-shadow .16s ease; width:100%; }
-    .game-btn.blue { background:#2563eb; color:#fff; }
-    .game-btn.purple { background:#7c3aed; color:#fff; }
-    .game-btn:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.45); }
-    footer { text-align:center; color:#777; padding:18px 0; margin-top:36px; font-size:13px; }
-    #idModal { display: none; position:fixed; inset:0; background:rgba(0,0,0,0.78); justify-content:center; align-items:center; z-index:1000; }
-    .modal-inner { width:92%; max-width:420px; background:#1f2937; padding:22px; border-radius:10px; text-align:center; }
-    .modal-inner h2 { margin:0 0 8px; color:#fff; }
-    .modal-inner input { width:100%; padding:12px; border-radius:8px; border:none; margin-top:12px; font-size:16px; }
-    .modal-inner .btn-validate { margin-top:14px; padding:12px 16px; border-radius:8px; border:none; background:#22c55e; color:#fff; font-weight:700; cursor:pointer; }
-    .modal-inner .error { color:#ff8a8a; margin-top:10px; }
-    .modal-inner .ok { color:#9ef08f; margin-top:10px; font-weight:700; }
+    html, body { margin: 0; padding: 0; height: 100%; background: #0d1117; color: #fff; font-family: "Segoe UI", Tahoma, Arial; }
+    .wrap { max-width: 820px; margin: 30px auto; padding: 20px; }
+    .card { background: #101216; border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); text-align: center; }
+    h1 { color: #facc15; margin: 0 0 8px; font-size: 26px; }
+    p.sub { color: #bfc7c5; margin: 8px 0 18px; }
+
+    select {
+      background: #2a2a2a;
+      color: #fff;
+      font-size: 18px;
+      padding: 14px 24px;
+      border: 2px solid #3e3e3e;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 300px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    select:hover { background: #3e3e3e; transform: scale(1.05); }
+    select:focus { outline: none; border: 2px solid #00ff99; }
+
+    .ybtn {
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 20px 40px;
+      font-size: 24px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.3s ease;
+      width: 100%;
+      min-height: 60px;
+    }
+    .ybtn:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+    }
+
+    .signal {
+      margin-top:26px;
+      font-size:48px;
+      font-weight:900;
+      color:#00ff99;
+      padding:18px 24px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(10,30,20,0.12), rgba(10,30,20,0.06));
+      display:inline-block;
+      min-width:320px;
+      text-align:center;
+      transform: scale(1);
+      transition: transform .36s cubic-bezier(.2,.9,.22,1), box-shadow .36s ease;
+    }
+    .signal.pop {
+      transform: scale(1.22);
+      box-shadow: 0 20px 60px rgba(0,255,153,0.14), 0 0 40px rgba(0,255,153,0.12);
+      text-shadow: 0 0 12px rgba(0,255,153,0.35);
+    }
+    .meta { margin-top:14px; color:#ffd86b; font-weight:700; min-height:22px; }
+    .fade { opacity:0; transform: translateY(8px); transition: opacity .36s ease, transform .36s ease; }
+    .fade.show { opacity:1; transform: translateY(0); }
+
+    /* Сетка */
+    .grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    .cell {
+      background-color: #333;
+      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .cell:hover { background-color: #444; transform: scale(1.05); }
+    .bomb { background-color: red; }
+    .crystal { background-color: green; }
+
+    @media(min-width:720px){
+      .controls { flex-direction: row; gap: 16px; }
+      .ybtn { width: 220px; }
+      .signal { min-width: 420px; font-size: 56px; }
+    }
   </style>
 </head>
 <body>
-  <div class="site">
-    <header>
-      <div class="logo">BETWINNER BURKINA FASO</div>
-      <nav class="nav">
-        <a href="#how">Comment ça marche</a>
-        <a href="#">Jeux</a>
-      </nav>
-    </header>
+  <div class="wrap">
+    <div class="card">
+      <h1>AI Mines Predictor</h1>
+      <p class="sub">Sélectionnez la taille de la grille et le nombre de mines, puis obtenez le montant de la mise ou le signal de l'IA.</p>
 
-    <main id="mainContent">
-      <h1>Gagnez de l’argent réel avec des prédictions IA</h1>
-      <p class="lead">Rejoignez des milliers de joueurs burkinabè utilisant notre IA intelligente. 96% de précision des signaux, prédictions en temps réel et retraits rapides !</p>
+      <label for="gridSize">Taille de la grille</label>
+      <select id="gridSize">
+        <option value="3x3">3x3</option>
+        <option value="4x4">4x4</option>
+        <option value="5x5" selected>5x5</option>
+        <option value="6x6">6x6</option>
+        <option value="7x7">7x7</option>
+      </select>
 
-      <div class="btn-container" id="buttons">
-        <button class="game-btn blue" id="aviatorBtn">Aviator</button>
-        <button class="game-btn purple" id="minesBtn">Mines</button>
-        <button class="game-btn purple" id="penaltyBtn">Penalty</button>
-        <button class="game-btn blue" id="chickenBtn">Chicken Road</button>
+      <label for="numMines">Nombre de mines</label>
+      <select id="numMines">
+        <option value="1">1 Mine</option>
+        <option value="2">2 Mines</option>
+        <option value="3" selected>3 Mines</option>
+        <option value="4">4 Mines</option>
+        <option value="5">5 Mines</option>
+        <option value="6">6 Mines</option>
+        <option value="7">7 Mines</option>
+        <option value="10">10 Mines</option>
+        <option value="15">15 Mines</option>
+      </select>
+
+      <div class="controls">
+        <button id="btnBet" class="ybtn">Obtenir la mise</button>
+        <button id="btnSignal" class="ybtn" disabled>Obtenir le signal</button>
       </div>
-    </main>
 
-    <footer>© 2025 Prédicteur IA Burkina Faso. Non affilié à BETWINNER. Jouez de manière responsable.</footer>
-  </div>
+      <div class="grid" id="gameGrid" style="display:none;"></div>
 
-  <!-- Модальное окно для проверки ID -->
-  <div id="idModal" role="dialog" aria-modal="true">
-    <div class="modal-inner" role="document">
-      <h2>Entrez votre ID</h2>
-      <input id="userId" type="text" placeholder="ID joueur (min 7 caractères)" aria-label="Player ID" />
-      <div class="error" id="errText" aria-live="polite"></div>
-      <div class="ok" id="okText" style="display:none">✅ Accès autorisé</div>
-      <button class="btn-validate" id="validateBtn">Valider</button>
+      <div id="signal" class="signal">GET YOUR SIGNAL</div>
+      <div id="meta" class="meta"></div>
     </div>
   </div>
 
   <script>
-    const btns = document.querySelectorAll('.game-btn');
-    const idModal = document.getElementById('idModal');
-    const userIdInput = document.getElementById('userId');
-    const errText = document.getElementById('errText');
-    const okText = document.getElementById('okText');
-    const validateBtn = document.getElementById('validateBtn');
-    const mainContent = document.getElementById('mainContent');
-    let redirectTarget = null;
+  document.addEventListener('DOMContentLoaded', function () {
+    let gameData = [];
+    let gridSize = 5;
+    let numMines = 3;
+    let roundActive = false;
 
-    // Открыть модалку перед игрой Aviator
-    document.getElementById('aviatorBtn').addEventListener('click', function () {
-      redirectTarget = 'aviator';
-      errText.textContent = '';
-      okText.style.display = 'none';
-      userIdInput.value = '';
-      idModal.style.display = 'flex';
-      setTimeout(() => userIdInput.focus(), 60);
-    });
+    const btnBet = document.getElementById('btnBet');
+    const btnSignal = document.getElementById('btnSignal');
+    const gameGrid = document.getElementById('gameGrid');
+    const meta = document.getElementById('meta');
+    const gridSizeSelect = document.getElementById('gridSize');
+    const numMinesSelect = document.getElementById('numMines');
 
-    // Открыть модалку перед игрой Mines
-    document.getElementById('minesBtn').addEventListener('click', function () {
-      redirectTarget = 'mines';
-      errText.textContent = '';
-      okText.style.display = 'none';
-      userIdInput.value = '';
-      idModal.style.display = 'flex';
-      setTimeout(() => userIdInput.focus(), 60);
-    });
+    btnSignal.disabled = true;
+    gameGrid.style.display = 'none';
 
-    // Открыть модалку перед игрой Penalty
-    document.getElementById('penaltyBtn').addEventListener('click', function () {
-      redirectTarget = 'penalty';
-      errText.textContent = '';
-      okText.style.display = 'none';
-      userIdInput.value = '';
-      idModal.style.display = 'flex';
-      setTimeout(() => userIdInput.focus(), 60);
-    });
-
-    // Проверка ID и перенаправление на соответствующую игру
-    validateBtn.addEventListener('click', function () {
-      const id = (userIdInput.value || '').trim();
-      if (id.length < 7) {
-        errText.textContent = 'L’ID doit contenir au moins 7 caractères.';
-        okText.style.display = 'none';
-        return;
+    btnBet.addEventListener('click', () => {
+      if (!roundActive) {
+        const min = 1200, max = 3000;
+        const amount = Math.floor(Math.random() * (max - min + 1)) + min;
+        meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
+        meta.classList.add('fade');
+        setTimeout(() => meta.classList.add('show'), 40);
+        setTimeout(() => { meta.classList.remove('show'); }, 1400);
+        btnSignal.disabled = false;
+        roundActive = true;
+      } else {
+        alert('Vous devez terminer la partie avant de recommencer.');
       }
-      errText.textContent = '';
-      okText.style.display = 'block';
-      setTimeout(() => {
-        idModal.style.display = 'none';
-        if (redirectTarget === 'mines') {
-          location.assign('mines.html?user=' + encodeURIComponent(id)); // Перенаправление на Mines  ID
-        }
-        if (redirectTarget === 'aviator') {
-          location.assign('aviator.html?user=' + encodeURIComponent(id)); // Перенаправление на Aviator с ID
-        }
-        if (redirectTarget === 'penalty') {
-          location.assign('pen.html?user=' + encodeURIComponent(id)); // Перенаправление на Penalty с ID
-        }
-      }, 500);
     });
 
-    // Game logic for Penalty game page
-    if (redirectTarget === 'penalty') {
-      // Add your game logic here for penalty game once the ID is verified
-      const gameGrid = document.getElementById('gameGrid');
-      const signalEl = document.getElementById('signal');
-      const btnBet = document.getElementById('btnBet');
-      const btnSignal = document.getElementById('btnSignal');
-      const meta = document.getElementById('meta');
-      let roundActive = false;
-      let idVerified = true;
+    btnSignal.addEventListener('click', () => {
+      if (roundActive) {
+        generateGameGrid();
+      } else {
+        alert('Veuillez d\'abord effectuer une mise!');
+      }
+    });
 
-      btnBet.addEventListener('click', () => {
-        if (!roundActive) {
-          const min = 1200, max = 3000;
-          const amount = Math.floor(Math.random() * (max - min + 1)) + min;
-          meta.textContent = 'Mise recommandée: ' + amount + ' XOF';
-          meta.classList.add('fade');
-          setTimeout(() => meta.classList.add('show'), 40);
-          setTimeout(() => { meta.classList.remove('show'); }, 1400);
-          btnSignal.disabled = false;
-          roundActive = true;
-        } else {
-          alert('Vous devez terminer la partie avant de recommencer.');
+    function generateGameGrid() {
+      gameGrid.innerHTML = '';
+      gameData = [];
+
+      gridSize = parseInt(gridSizeSelect.value.split('x')[0]) || 5;
+      numMines = parseInt(numMinesSelect.value) || 3;
+
+      const totalCells = gridSize * gridSize;
+      let minesPlaced = 0;
+
+      gameGrid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
+      gameGrid.style.gridTemplateRows = `repeat(${gridSize}, 60px)`;
+
+      for (let i = 0; i < totalCells; i++) {
+        gameData.push('crystal');
+      }
+
+      while (minesPlaced < numMines) {
+        const randomIndex = Math.floor(Math.random() * totalCells);
+        if (gameData[randomIndex] !== 'bomb') {
+          gameData[randomIndex] = 'bomb';
+          minesPlaced++;
         }
+      }
+
+      gameData.forEach((item, index) => {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.addEventListener('click', () => {
+          if (!roundActive) return;
+          if (gameData[index] === 'bomb') {
+            cell.classList.add('bomb');
+            alert('💥 Boom! Vous avez perdu!');
+            endRound();
+          } else {
+            cell.classList.add('crystal');
+          }
+        });
+        gameGrid.appendChild(cell);
       });
 
-      btnSignal.addEventListener('click', () => {
-        if (roundActive) {
-          // Call the function to generate the game grid here
-          alert('Game start!');
-        } else {
-          alert('Veuillez d\'abord effectuer une mise!');
-        }
-      });
+      gameGrid.style.display = 'grid';
     }
+
+    function endRound() {
+      roundActive = false;
+      btnSignal.disabled = true;
+    }
+  });
   </script>
 </body>
 </html>
